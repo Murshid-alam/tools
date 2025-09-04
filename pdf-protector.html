@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure your sensitive PDF files by adding strong password protection. Our free online PDF Protector works in your browser, no uploads needed. Encrypt your PDF in seconds.">
+    <meta name="keywords" content="PDF protector, password protect PDF, encrypt PDF, secure PDF, add password to PDF, online tool, free">
+    <title>PDF Protector - Add Password to PDF Online Free | ToolsHub</title>
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF-Lib for client-side PDF manipulation -->
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --gray: #6c757d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Common Header & Footer from ToolsHub */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+        }
+        
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(rgba(67, 97, 238, 0.9), rgba(58, 12, 163, 0.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234361ee"/><path d="M0 0L100 100" stroke="%233a0ca3" stroke-width="2"/><path d="M100 0L0 100" stroke="%233a0ca3" stroke-width="2"/></svg>');
+            color: white;
+        }
+        
+        .hero h2 { font-size: 2.8rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; opacity: 0.9; }
+
+        /* Main Content & Tool Specific Styles */
+        .main-content { display: flex; flex-wrap: wrap; gap: 25px; margin: 30px 0; }
+        .tool-card { flex: 1 1 65%; background: white; border-radius: var(--border-radius); padding: 30px; box-shadow: var(--box-shadow); }
+        .card-title { font-size: 1.5rem; color: var(--dark); margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--light); display: flex; align-items: center; gap: 10px; }
+        
+        .upload-area { border: 2px dashed #d0d7de; border-radius: var(--border-radius); padding: 40px 20px; text-align: center; margin-bottom: 25px; transition: var(--transition); cursor: pointer; background: var(--light); }
+        .upload-area:hover { border-color: var(--primary); background: rgba(67, 97, 238, 0.05); }
+        .upload-area.dragover { background-color: rgba(67, 97, 238, 0.1); border-color: var(--primary); }
+        .upload-icon { font-size: 3.5rem; color: var(--primary); margin-bottom: 15px; }
+        .upload-text { margin-bottom: 20px; color: var(--dark); }
+        
+        .btn { display: inline-block; background: var(--primary); color: white; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: var(--transition); border: none; font-size: 1rem; box-shadow: var(--box-shadow); }
+        .btn:hover { background: var(--secondary); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+        
+        /* File Info Display */
+        .file-info-display { text-align: center; padding: 20px; background: var(--light); border-radius: var(--border-radius); margin-bottom: 25px; }
+        .file-info-display .fa-file-pdf { font-size: 2rem; color: #e74c3c; margin-bottom: 10px; }
+        .file-info-display p { margin: 0; }
+        .file-info-display .file-name { font-weight: bold; }
+        .file-info-display .file-size { font-size: 0.9rem; color: var(--gray); }
+
+        /* Password Section */
+        .password-section { margin-top: 20px; }
+        .password-group { position: relative; margin-bottom: 15px; }
+        .password-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .password-group input { width: 100%; padding: 12px 40px 12px 15px; border: 1px solid #e1e8ed; border-radius: var(--border-radius); font-size: 1rem; }
+        .password-group .toggle-password { position: absolute; right: 15px; top: 40px; cursor: pointer; color: var(--gray); }
+        #password-match-error { color: var(--accent); font-size: 0.9rem; display: none; }
+
+        /* Action Buttons */
+        .action-buttons { margin-top: 20px; }
+        .action-btn { width: 100%; padding: 16px; font-size: 1.1rem; }
+        #protectBtn { background: var(--accent); box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3); }
+        #protectBtn:hover { background: #e20a72; box-shadow: 0 6px 15px rgba(247, 37, 133, 0.4); }
+        #protectBtn:disabled { background: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; }
+        #downloadBtn { display: none; background: var(--success); box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3); }
+        #downloadBtn:hover { background: #3ab7e0; box-shadow: 0 6px 15px rgba(76, 201, 240, 0.4); }
+
+        /* Progress Bar */
+        .progress-container { display: none; margin: 20px 0; }
+        .progress-bar { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; margin-bottom: 10px; }
+        .progress { height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.3s; }
+        .status-text { font-size: 0.9rem; color: var(--gray); text-align: center; }
+
+        /* Ad Space */
+        .ad-space { flex: 1 1 30%; display: flex; flex-direction: column; gap: 20px; }
+        .ad-unit { background: white; border-radius: var(--border-radius); padding: 20px; text-align: center; box-shadow: var(--box-shadow); min-height: 250px; display: flex; align-items: center; justify-content: center; }
+        
+        /* Features Section */
+        .features { background: white; padding: 60px 0; margin: 40px 0; }
+        .section-title { text-align: center; margin: 60px 0 40px; }
+        .section-title h2 { font-size: 2.2rem; color: var(--dark); }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .feature { text-align: center; padding: 30px; }
+        .feature i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
+        .feature h3 { margin-bottom: 15px; color: var(--dark); }
+        
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 60px 0 30px; margin-top: 40px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { font-size: 1.3rem; margin-bottom: 20px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: white; text-decoration: none; opacity: 0.8; transition: var(--transition); }
+        .footer-links a:hover { opacity: 1; color: var(--accent); }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; padding: 0; }
+        .social-links a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); color: white; border-radius: 50%; transition: var(--transition); }
+        .social-links a:hover { background: var(--accent); }
+        .copyright { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.7; }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content { position: relative; }
+            nav { position: absolute; top: 100%; left: 0; right: 0; background: var(--secondary); padding: 20px; clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: var(--transition); z-index: 999; }
+            nav.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            nav ul { flex-direction: column; gap: 15px; }
+            .mobile-menu-btn { display: block; }
+            .main-content { flex-direction: column; }
+            .tool-card, .ad-space { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools" style="font-size: 2rem;"></i>
+                    <h1>ToolsHub</h1>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav id="nav">
+                    <ul>
+                        <li><a href="/tools/index.html">Home</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Secure Your PDFs with a Password</h2>
+            <p>Easily add a password to your PDF files to protect them from unauthorized access. Fast, secure, and free.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="main-content">
+            <!-- PDF Protector Tool Card -->
+            <section class="tool-card">
+                <h2 class="card-title"><i class="fas fa-lock"></i> PDF Protector</h2>
+                
+                <div id="upload-section">
+                    <div class="upload-area" id="dropArea">
+                        <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
+                        <h3 class="upload-text">Drag & Drop PDF file here</h3>
+                        <p>or</p>
+                        <input type="file" id="fileInput" accept=".pdf" hidden>
+                        <button class="btn" id="browseBtn">Select PDF File</button>
+                    </div>
+                </div>
+
+                <div id="settings-section" style="display: none;">
+                    <div class="file-info-display">
+                        <i class="fas fa-file-pdf"></i>
+                        <p class="file-name" id="fileName"></p>
+                        <p class="file-size" id="fileSize"></p>
+                    </div>
+                    <div class="password-section">
+                        <div class="password-group">
+                            <label for="password">Set a Password</label>
+                            <input type="password" id="password" placeholder="Enter your password">
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        <div class="password-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Re-enter your password">
+                            <i class="fas fa-eye toggle-password"></i>
+                        </div>
+                        <p id="password-match-error">Passwords do not match.</p>
+                    </div>
+                </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+                    <p class="status-text" id="statusText"></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn action-btn" id="protectBtn" disabled>Protect PDF</button>
+                    <a class="btn action-btn" id="downloadBtn" href="#" download="protected.pdf">Download Protected PDF</a>
+                </div>
+            </section>
+            
+            <!-- Advertisement Space -->
+            <aside class="ad-space">
+                <div class="ad-unit">
+                    <!-- Google AdSense Ad Unit -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-YOUR_PUBLISHER_ID_HERE"
+                         data-ad-slot="YOUR_AD_SLOT_ID_HERE"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                <div class="ad-unit">
+                     <!-- Google AdSense Ad Unit -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-YOUR_PUBLISHER_ID_HERE"
+                         data-ad-slot="YOUR_AD_SLOT_ID_HERE"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Use Our PDF Protector?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Strong Encryption</h3>
+                    <p>We use robust encryption standards to ensure your protected files are safe from prying eyes.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <h3>Client-Side Security</h3>
+                    <p>Your PDF file is never sent to our servers. All password protection happens right in your browser.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Incredibly Fast</h3>
+                    <p>No waiting around. Your PDF is encrypted and ready for download in just a few seconds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About ToolsHub</h3>
+                    <p>ToolsHub provides free online tools to help you work with images and PDF files more efficiently.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/tools/index.html">Home</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Popular Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="/tools/pdf-merger.html">PDF Merger</a></li>
+                        <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
+                        <li><a href="/tools/heictojpg.html">HEIC to JPG Converter</a></li>
+                        <li><a href="/tools/image-resizer.html">Image Resizer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> support@toolshub.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 ToolsHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu
+            const mobileMenuBtn = document.getElementById('mobile-menu');
+            const nav = document.getElementById('nav');
+            mobileMenuBtn.addEventListener('click', () => nav.classList.toggle('active'));
+
+            // Tool DOM Elements
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const uploadSection = document.getElementById('upload-section');
+            const settingsSection = document.getElementById('settings-section');
+            const fileNameEl = document.getElementById('fileName');
+            const fileSizeEl = document.getElementById('fileSize');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordError = document.getElementById('password-match-error');
+            const protectBtn = document.getElementById('protectBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const statusText = document.getElementById('statusText');
+            
+            let selectedFile = null;
+
+            // --- Event Listeners ---
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+            
+            // Drag and Drop
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'));
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'));
+            });
+            dropArea.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
+
+            // Password validation
+            [passwordInput, confirmPasswordInput].forEach(input => {
+                input.addEventListener('input', validatePasswords);
+            });
+            
+            // Toggle password visibility
+            document.querySelectorAll('.toggle-password').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    const input = e.target.previousElementSibling;
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    e.target.classList.toggle('fa-eye');
+                    e.target.classList.toggle('fa-eye-slash');
+                });
+            });
+
+            protectBtn.addEventListener('click', protectPdf);
+
+            // --- Functions ---
+            function handleFile(file) {
+                if (file && file.type === 'application/pdf') {
+                    selectedFile = file;
+                    fileNameEl.textContent = file.name;
+                    fileSizeEl.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB`;
+                    
+                    uploadSection.style.display = 'none';
+                    settingsSection.style.display = 'block';
+                    validatePasswords();
+                } else {
+                    alert('Please select a valid PDF file.');
+                }
+            }
+
+            function validatePasswords() {
+                const pass1 = passwordInput.value;
+                const pass2 = confirmPasswordInput.value;
+
+                if (pass1 && pass2 && pass1 !== pass2) {
+                    passwordError.style.display = 'block';
+                    protectBtn.disabled = true;
+                } else {
+                    passwordError.style.display = 'none';
+                    protectBtn.disabled = !(selectedFile && pass1 && pass1 === pass2);
+                }
+            }
+
+            async function protectPdf() {
+                if (!selectedFile || protectBtn.disabled) return;
+
+                protectBtn.disabled = true;
+                protectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Protecting...';
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+                statusText.textContent = 'Reading PDF file...';
+
+                try {
+                    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+                    const arrayBuffer = await selectedFile.arrayBuffer();
+
+                    progressBar.style.width = '25%';
+                    statusText.textContent = 'Loading document...';
+
+                    const pdfDoc = await PDFDocument.load(arrayBuffer);
+                    
+                    progressBar.style.width = '50%';
+                    statusText.textContent = 'Applying encryption...';
+                    
+                    const password = passwordInput.value;
+                    const options = {
+                        userPassword: password,
+                        ownerPassword: password, // For simplicity, owner and user pass are the same
+                        permissions: {
+                            printing: 'highResolution',
+                            modifying: false,
+                            copying: false,
+                            annotating: false,
+                            fillingForms: false,
+                            contentAccessibility: false,
+                            documentAssembly: false,
+                        },
+                    };
+
+                    const pdfBytes = await pdfDoc.save({ ...options });
+                    
+                    progressBar.style.width = '100%';
+                    statusText.textContent = 'Encryption complete!';
+
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+
+                    downloadBtn.href = url;
+                    downloadBtn.download = `protected-${selectedFile.name}`;
+                    
+                    setTimeout(() => {
+                        protectBtn.style.display = 'none';
+                        downloadBtn.style.display = 'block';
+                        progressContainer.style.display = 'none';
+                    }, 500);
+
+                } catch (error) {
+                    console.error('Error protecting PDF:', error);
+                    alert('An error occurred. The PDF might be corrupted or already encrypted.');
+                    resetTool();
+                }
+            }
+            
+            function resetTool() {
+                 selectedFile = null;
+                 fileInput.value = '';
+                 uploadSection.style.display = 'block';
+                 settingsSection.style.display = 'none';
+                 passwordInput.value = '';
+                 confirmPasswordInput.value = '';
+                 protectBtn.disabled = true;
+                 protectBtn.innerHTML = 'Protect PDF';
+                 protectBtn.style.display = 'block';
+                 downloadBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
