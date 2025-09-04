@@ -7,7 +7,7 @@
     <meta name="keywords" content="HEIC to JPG, HEIC converter, iPhone image converter, HEIC to JPEG, online converter, free tool">
     <title>HEICtoJPG Converter - Convert HEIC Images to JPG Format Online</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/heic2any@2.0.2/dist/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.3/heic2any.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -320,6 +320,7 @@
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             margin-bottom: 10px;
+            background-color: #f0f0f0; /* Added a background for loading state */
         }
         
         .file-info {
@@ -654,7 +655,7 @@
                     <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                     <h3 class="upload-text">Drag & Drop your HEIC image here</h3>
                     <p>or</p>
-                    <input type="file" id="file-input" accept=".heic,.HEIC,image/heic,image/HEIC" hidden>
+                    <input type="file" id="file-input" accept=".heic,.HEIC,.heif,.HEIF,image/heic,image/heif" hidden>
                     <button class="btn" id="browse-btn">Select HEIC File</button>
                 </div>
 
@@ -692,29 +693,11 @@
 
             <div class="ad-space">
                 <div class="ad-unit">
-                    <!-- AdSense Ad Unit - Replace with your Ad Unit ID -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-your-publisher-id-here"
-                         data-ad-slot="your-ad-slot-here"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
+                    <p>Ad Placeholder</p>
                 </div>
                 
                 <div class="ad-unit horizontal">
-                    <!-- AdSense Horizontal Ad Unit - Replace with your Ad Unit ID -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-your-publisher-id-here"
-                         data-ad-slot="your-ad-slot-here"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
+                    <p>Ad Placeholder</p>
                 </div>
             </div>
         </div>
@@ -763,7 +746,7 @@
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
-                        <li><a href="/tools/index.html">Home</a></li>
+                        <li><a href="#">Home</a></li>
                         <li><a href="#">How It Works</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
@@ -772,9 +755,9 @@
                 <div class="footer-section">
                     <h3>Popular Tools</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Image Converter</a></li>
-                        <li><a href="#">Image Resizer</a></li>
-                        <li><a href="#">PDF to Word Converter</a></li>
+                        <li><a href="/tools/image-converter.html">Image Converter</a></li>
+                        <li><a href="/tools/image-resizer.html">Image Resizer</a></li>
+                        <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
                         <li><a href="#">PDF Compressor</a></li>
                     </ul>
                 </div>
@@ -808,16 +791,6 @@
             }
         });
         
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target) && nav.classList.contains('active')) {
-                nav.classList.remove('active');
-                const icon = mobileMenuBtn.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-
         // HEIC to JPG conversion functionality
         document.addEventListener('DOMContentLoaded', function() {
             // Elements
@@ -839,6 +812,7 @@
             
             let selectedFile = null;
             let convertedImageBlob = null;
+            let originalPreviewUrl = null; // To store the preview URL for later cleanup
             
             // Event Listeners
             browseBtn.addEventListener('click', () => fileInput.click());
@@ -887,7 +861,6 @@
             }
             
             function isHeicFile(file) {
-                // Check for HEIC file by extension or MIME type
                 const fileName = file.name.toLowerCase();
                 return fileName.endsWith('.heic') || 
                        fileName.endsWith('.heif') ||
@@ -901,11 +874,30 @@
                 // Show file info
                 const fileSize = (file.size / 1024).toFixed(2);
                 originalInfo.textContent = `Size: ${fileSize} KB | Type: HEIC`;
+
+                // --- CHANGE START: Generate and display a preview immediately ---
+                // Show a loading/placeholder state first
+                originalPreview.src = '';
+                preview.classList.remove('hidden'); // Show the preview container
                 
-                // For HEIC files, we can't preview directly, so show a placeholder
-                originalPreview.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23f0f0f0"/><text x="100" y="100" font-family="Arial" font-size="14" fill="%23333" text-anchor="middle">HEIC Image Preview Not Available</text></svg>';
+                heic2any({
+                    blob: selectedFile,
+                    toType: 'image/jpeg',
+                    quality: 0.7 // Use a medium quality for fast preview generation
+                })
+                .then(previewBlob => {
+                    originalPreviewUrl = URL.createObjectURL(previewBlob);
+                    originalPreview.src = originalPreviewUrl;
+                })
+                .catch(error => {
+                    console.error('Preview generation error:', error);
+                    // Fallback to placeholder if preview fails
+                    originalPreview.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23f0f0f0"/><text x="100" y="100" font-family="Arial" font-size="14" fill="%23333" text-anchor="middle">HEIC Preview Failed</text></svg>';
+                    alert('Could not generate a preview for this HEIC file.');
+                });
+                // --- CHANGE END ---
                 
-                // Show controls
+                // Hide the upload box and show the conversion controls
                 controls.classList.remove('hidden');
                 dropZone.classList.add('hidden');
             }
@@ -920,47 +912,33 @@
                 
                 const quality = parseInt(imageQuality.value) / 100;
                 
-                // Show converting state
                 convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
                 convertBtn.disabled = true;
                 
-                // Use the heic2any library to convert HEIC to JPG
                 heic2any({
                     blob: selectedFile,
                     toType: 'image/jpeg',
                     quality: quality
                 })
                 .then(conversionResult => {
-                    // Create a URL for the converted image
                     const url = URL.createObjectURL(conversionResult);
-                    
-                    // Show converted image preview
                     convertedPreview.src = url;
                     
-                    // Get file size info
-                    conversionResult.arrayBuffer().then(buffer => {
-                        const convertedSize = (buffer.byteLength / 1024).toFixed(2);
-                        const originalSize = (selectedFile.size / 1024).toFixed(2);
+                    const convertedSize = (conversionResult.size / 1024).toFixed(2);
+                    convertedInfo.textContent = `Size: ${convertedSize} KB | Type: JPG`;
                         
-                        convertedInfo.textContent = `Size: ${convertedSize} KB | Type: JPG`;
-                        
-                        // Store the converted blob for download
-                        convertedImageBlob = conversionResult;
-                        
-                        // Show preview section
-                        preview.classList.remove('hidden');
-                        controls.classList.add('hidden');
-                    });
+                    convertedImageBlob = conversionResult;
                     
-                    // Reset convert button
+                    // Show the full preview section with converted image
+                    preview.classList.remove('hidden');
+                    controls.classList.add('hidden');
+                    
                     convertBtn.innerHTML = 'Convert to JPG';
                     convertBtn.disabled = false;
                 })
                 .catch(error => {
                     console.error('Conversion error:', error);
                     alert('Error converting image. Please try again with a different file.');
-                    
-                    // Reset convert button
                     convertBtn.innerHTML = 'Convert to JPG';
                     convertBtn.disabled = false;
                 });
@@ -972,7 +950,7 @@
                 const url = URL.createObjectURL(convertedImageBlob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `converted-${selectedFile.name.replace('.heic', '.jpg').replace('.HEIC', '.jpg')}`;
+                a.download = `converted-${selectedFile.name.replace(/\.(heic|heif)$/i, '.jpg')}`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -980,28 +958,33 @@
             }
             
             function resetTool() {
-                // Reset UI
+                // --- CHANGE START: Clean up preview URL ---
+                if (originalPreviewUrl) {
+                    URL.revokeObjectURL(originalPreviewUrl);
+                    originalPreviewUrl = null;
+                }
+                if (convertedPreview.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(convertedPreview.src);
+                }
+                // --- CHANGE END ---
+
                 originalPreview.src = '';
                 convertedPreview.src = '';
                 originalInfo.textContent = 'Size: 0 KB';
                 convertedInfo.textContent = 'Size: 0 KB';
                 
-                // Reset values
                 imageQuality.value = 90;
                 updateQualityValue();
                 
-                // Hide/show appropriate sections
                 preview.classList.add('hidden');
                 controls.classList.add('hidden');
                 dropZone.classList.remove('hidden');
                 
-                // Reset variables
                 selectedFile = null;
                 convertedImageBlob = null;
                 fileInput.value = '';
             }
             
-            // Initialize values
             updateQualityValue();
         });
     </script>
