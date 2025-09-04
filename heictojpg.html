@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Free online HEIC to JPG converter. Convert HEIC images from your iPhone to widely supported JPG format instantly. No registration needed.">
     <meta name="keywords" content="HEIC to JPG, HEIC converter, iPhone image converter, HEIC to JPEG, online converter, free tool">
-    <title>HEICtoJPG Converter - Convert HEIC Images to JPG Format Online</title>
+    <title>HEIC to JPG Converter - ToolsHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.3/heic2any.min.js"></script>
     <style>
@@ -64,7 +64,7 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .logo h1 {
             font-size: 1.8rem;
             font-weight: 700;
@@ -81,26 +81,10 @@
             text-decoration: none;
             font-weight: 500;
             transition: var(--transition);
-            position: relative;
-        }
-        
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: var(--transition);
         }
         
         nav a:hover {
             color: var(--accent);
-        }
-        
-        nav a:hover::after {
-            width: 100%;
         }
         
         .mobile-menu-btn {
@@ -614,8 +598,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-exchange-alt"></i>
-                    <h1>HEICtoJPG Converter</h1>
+                    <i class="fas fa-tools" style="font-size: 2rem;"></i>
+                    <h1>ToolsHub</h1>
                 </div>
                 <button class="mobile-menu-btn" id="mobile-menu">
                     <i class="fas fa-bars"></i>
@@ -623,7 +607,9 @@
                 <nav id="nav">
                     <ul>
                         <li><a href="/tools/index.html">Home</a></li>
-                        <li><a href="#">Tools</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
                         <li><a href="#">Pricing</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -734,8 +720,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>About HEICtoJPG Converter</h3>
-                    <p>We provide free online tools to help you work with images more efficiently.</p>
+                    <h3>About ToolsHub</h3>
+                    <p>ToolsHub provides free online tools to help you work with images and PDF files more efficiently.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -746,30 +732,32 @@
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">How It Works</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="/tools/index.html">Home</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Popular Tools</h3>
                     <ul class="footer-links">
-                        <li><a href="/tools/image-converter.html">Image Converter</a></li>
-                        <li><a href="/tools/image-resizer.html">Image Resizer</a></li>
+                        <li><a href="/tools/img-compression.html">Image Compressor</a></li>
                         <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
-                        <li><a href="#">PDF Compressor</a></li>
+                        <li><a href="/tools/heictojpg.html">HEIC to JPG Converter</a></li>
+                        <li><a href="#">PDF Merger</a></li>
+                        <li><a href="/tools/image-resize.html">Image Resizer</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Contact Us</h3>
-                    <p><i class="fas fa-envelope"></i> support@heictojpg.com</p>
+                    <p><i class="fas fa-envelope"></i> support@toolshub.com</p>
                     <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
                     <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</p>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 HEICtoJPG Converter. All rights reserved.</p>
+                <p>&copy; 2023 ToolsHub. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -871,19 +859,16 @@
             function processImage(file) {
                 selectedFile = file;
                 
-                // Show file info
                 const fileSize = (file.size / 1024).toFixed(2);
                 originalInfo.textContent = `Size: ${fileSize} KB | Type: HEIC`;
 
-                // --- CHANGE START: Generate and display a preview immediately ---
-                // Show a loading/placeholder state first
                 originalPreview.src = '';
-                preview.classList.remove('hidden'); // Show the preview container
+                preview.classList.remove('hidden');
                 
                 heic2any({
                     blob: selectedFile,
                     toType: 'image/jpeg',
-                    quality: 0.7 // Use a medium quality for fast preview generation
+                    quality: 0.7
                 })
                 .then(previewBlob => {
                     originalPreviewUrl = URL.createObjectURL(previewBlob);
@@ -891,13 +876,10 @@
                 })
                 .catch(error => {
                     console.error('Preview generation error:', error);
-                    // Fallback to placeholder if preview fails
                     originalPreview.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23f0f0f0"/><text x="100" y="100" font-family="Arial" font-size="14" fill="%23333" text-anchor="middle">HEIC Preview Failed</text></svg>';
                     alert('Could not generate a preview for this HEIC file.');
                 });
-                // --- CHANGE END ---
                 
-                // Hide the upload box and show the conversion controls
                 controls.classList.remove('hidden');
                 dropZone.classList.add('hidden');
             }
@@ -921,6 +903,9 @@
                     quality: quality
                 })
                 .then(conversionResult => {
+                    if (convertedPreview.src.startsWith('blob:')) {
+                        URL.revokeObjectURL(convertedPreview.src);
+                    }
                     const url = URL.createObjectURL(conversionResult);
                     convertedPreview.src = url;
                     
@@ -929,7 +914,6 @@
                         
                     convertedImageBlob = conversionResult;
                     
-                    // Show the full preview section with converted image
                     preview.classList.remove('hidden');
                     controls.classList.add('hidden');
                     
@@ -958,7 +942,6 @@
             }
             
             function resetTool() {
-                // --- CHANGE START: Clean up preview URL ---
                 if (originalPreviewUrl) {
                     URL.revokeObjectURL(originalPreviewUrl);
                     originalPreviewUrl = null;
@@ -966,7 +949,6 @@
                 if (convertedPreview.src.startsWith('blob:')) {
                     URL.revokeObjectURL(convertedPreview.src);
                 }
-                // --- CHANGE END ---
 
                 originalPreview.src = '';
                 convertedPreview.src = '';
