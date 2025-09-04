@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToolsHub - Image Compression Tool</title>
+    <meta name="description" content="Compress JPG, PNG, and GIF images online for free. Reduce image file size without losing quality with our advanced image compression tool. Perfect for websites and sharing.">
+    <meta name="keywords" content="image compressor, compress image, reduce image size, image optimizer, free image compression, online tool">
+    <title>Image Compressor - Reduce Image File Size Online | ToolsHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -595,7 +597,7 @@
         <div class="main-content">
             <div class="tool-container">
                 <div class="upload-container" id="drop-zone">
-                    <div class="upload-icon">📁</div>
+                    <div class="upload-icon"><i class="fas fa-image"></i></div>
                     <h3>Upload Your Image</h3>
                     <p>Drag & drop your image here or click to browse</p>
                     <button class="btn" id="browse-btn">Select Image</button>
@@ -604,18 +606,18 @@
 
                 <div class="compression-controls hidden" id="controls">
                     <div class="control-group">
-                        <label for="compression-level">Compression Level</label>
+                        <label for="compression-level">Compression Level (Adjusts Dimensions)</label>
                         <div class="slider-container">
-                            <input type="range" min="0" max="100" value="85" class="slider" id="compression-level">
-                            <span class="slider-value" id="compression-value">85%</span>
+                            <input type="range" min="0" max="90" value="20" class="slider" id="compression-level">
+                            <span class="slider-value" id="compression-value">20%</span>
                         </div>
                     </div>
                     
                     <div class="control-group">
-                        <label for="image-quality">Output Quality</label>
+                        <label for="image-quality">Output Quality (Lossy Compression)</label>
                         <div class="slider-container">
-                            <input type="range" min="10" max="100" value="90" class="slider" id="image-quality">
-                            <span class="slider-value" id="quality-value">90%</span>
+                            <input type="range" min="10" max="100" value="85" class="slider" id="image-quality">
+                            <span class="slider-value" id="quality-value">85%</span>
                         </div>
                     </div>
                     
@@ -630,7 +632,7 @@
                     </div>
                     
                     <div class="preview-box">
-                        <h4>Compressed Image <span class="quality-tag" id="quality-tag">90% quality</span></h4>
+                        <h4>Compressed Image <span class="quality-tag" id="quality-tag">85% quality</span></h4>
                         <img id="compressed-preview" class="image-preview">
                         <div class="file-info" id="compressed-info">Size: 0 KB (0% saved)</div>
                     </div>
@@ -725,11 +727,11 @@
                 <div class="footer-section">
                     <h3>Popular Tools</h3>
                     <ul class="footer-links">
-                        <li><a href="/tools/img-compression.html">Image Compressor</a></li>
+                        <li><a href="/tools/image-resizer.html">Image Resizer</a></li>
                         <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
                         <li><a href="/tools/heictojpg.html">HEIC to JPG Converter</a></li>
                         <li><a href="#">PDF Merger</a></li>
-                        <li><a href="/tools/image-resize.html">Image Resizer</a></li>
+                        <li><a href="/tools/image-converter.html">Image Converter</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -752,24 +754,6 @@
         
         mobileMenuBtn.addEventListener('click', () => {
             nav.classList.toggle('active');
-            const icon = mobileMenuBtn.querySelector('i');
-            if (nav.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target) && nav.classList.contains('active')) {
-                nav.classList.remove('active');
-                const icon = mobileMenuBtn.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
         });
 
         // Image compression functionality
@@ -793,12 +777,12 @@
             const preview = document.getElementById('preview');
             const qualityTag = document.getElementById('quality-tag');
             
-            let originalImage = null;
+            let originalImageFile = null;
             let compressedImageBlob = null;
             
             // Event Listeners
             browseBtn.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleFileSelect);
+            fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files));
             dropZone.addEventListener('dragover', handleDragOver);
             dropZone.addEventListener('dragleave', handleDragLeave);
             dropZone.addEventListener('drop', handleDrop);
@@ -825,33 +809,27 @@
                 e.preventDefault();
                 e.stopPropagation();
                 dropZone.classList.remove('dragover');
-                
-                const files = e.dataTransfer.files;
-                if (files.length && files[0].type.startsWith('image/')) {
-                    processImage(files[0]);
-                }
+                handleFileSelect(e.dataTransfer.files);
             }
             
-            function handleFileSelect(e) {
-                const files = e.target.files;
+            function handleFileSelect(files) {
                 if (files.length && files[0].type.startsWith('image/')) {
                     processImage(files[0]);
+                } else {
+                    alert('Please select a valid image file.');
                 }
             }
             
             function processImage(file) {
-                originalImage = file;
+                originalImageFile = file;
                 
-                // Show original image preview
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     originalPreview.src = e.target.result;
                     
-                    // Show file info
                     const fileSize = (file.size / 1024).toFixed(2);
                     originalInfo.textContent = `Size: ${fileSize} KB`;
                     
-                    // Show controls
                     controls.classList.remove('hidden');
                     dropZone.classList.add('hidden');
                 };
@@ -868,52 +846,43 @@
             }
             
             function compressImage() {
-                if (!originalImage) return;
+                if (!originalImageFile) return;
+
+                compressBtn.innerText = "Compressing...";
+                compressBtn.disabled = true;
                 
                 const quality = parseInt(imageQuality.value) / 100;
-                const compressionLevelValue = parseInt(compressionLevel.value) / 100;
-                
+                const sizeReductionFactor = parseInt(compressionLevel.value) / 100;
+
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    // Calculate new dimensions based on compression level
-                    const width = img.width * (1 - compressionLevelValue * 0.5);
-                    const height = img.height * (1 - compressionLevelValue * 0.5);
+                    const scale = 1 - (sizeReductionFactor * 0.9); // Max 90% size reduction
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
                     
-                    canvas.width = width;
-                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
-                    // Draw image with new dimensions
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Get compressed image as data URL
-                    const dataUrl = canvas.toDataURL(originalImage.type, quality);
-                    
-                    // Show compressed image preview
-                    compressedPreview.src = dataUrl;
-                    
-                    // Calculate compressed size
-                    const compressedSize = Math.round((dataUrl.length * 0.75) / 1024);
-                    const originalSize = Math.round(originalImage.size / 1024);
-                    const saved = Math.round(((originalSize - compressedSize) / originalSize) * 100);
-                    
-                    compressedInfo.textContent = `Size: ${compressedSize} KB (${saved}% saved)`;
-                    
-                    // Convert data URL to blob for download
-                    fetch(dataUrl)
-                        .then(res => res.blob())
-                        .then(blob => {
-                            compressedImageBlob = blob;
-                        });
-                    
-                    // Show preview section
-                    preview.classList.remove('hidden');
-                    controls.classList.add('hidden');
+                    canvas.toBlob(blob => {
+                        compressedImageBlob = blob;
+                        compressedPreview.src = URL.createObjectURL(blob);
+
+                        const originalSizeKB = originalImageFile.size / 1024;
+                        const compressedSizeKB = blob.size / 1024;
+                        const savings = 100 - (compressedSizeKB * 100 / originalSizeKB);
+
+                        compressedInfo.textContent = `Size: ${compressedSizeKB.toFixed(2)} KB (${savings.toFixed(0)}% saved)`;
+                        
+                        preview.classList.remove('hidden');
+                        controls.classList.add('hidden');
+                        compressBtn.innerText = "Compress Image";
+                        compressBtn.disabled = false;
+                    }, originalImageFile.type, quality);
                 };
                 
-                img.src = URL.createObjectURL(originalImage);
+                img.src = URL.createObjectURL(originalImageFile);
             }
             
             function downloadImage() {
@@ -922,7 +891,7 @@
                 const url = URL.createObjectURL(compressedImageBlob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `compressed-${originalImage.name}`;
+                a.download = `compressed-${originalImageFile.name}`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -930,30 +899,25 @@
             }
             
             function resetTool() {
-                // Reset UI
                 originalPreview.src = '';
                 compressedPreview.src = '';
                 originalInfo.textContent = 'Size: 0 KB';
                 compressedInfo.textContent = 'Size: 0 KB (0% saved)';
                 
-                // Reset values
-                compressionLevel.value = 85;
-                imageQuality.value = 90;
+                compressionLevel.value = 20;
+                imageQuality.value = 85;
                 updateCompressionValue();
                 updateQualityValue();
                 
-                // Hide/show appropriate sections
                 preview.classList.add('hidden');
                 controls.classList.add('hidden');
                 dropZone.classList.remove('hidden');
                 
-                // Reset variables
-                originalImage = null;
+                originalImageFile = null;
                 compressedImageBlob = null;
                 fileInput.value = '';
             }
             
-            // Initialize values
             updateCompressionValue();
             updateQualityValue();
         });
