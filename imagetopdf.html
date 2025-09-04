@@ -43,7 +43,7 @@
             padding: 0 20px;
         }
         
-        /* Header */
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -118,7 +118,7 @@
             opacity: 0.9;
         }
         
-        /* Main Content Layout */
+        /* Tool Container */
         .main-content {
             display: flex;
             flex-wrap: wrap;
@@ -155,6 +155,11 @@
             font-size: 0.9rem;
         }
         
+        .ad-unit.horizontal {
+            min-height: auto;
+            height: 90px;
+        }
+        
         .card-title {
             font-size: 1.5rem;
             color: var(--dark);
@@ -177,9 +182,14 @@
             background: var(--light);
         }
         
-        .upload-container:hover, .upload-container.dragover {
+        .upload-container:hover {
             border-color: var(--primary);
-            background-color: rgba(67, 97, 238, 0.05);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .upload-container.dragover {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-color: var(--primary);
         }
         
         .upload-icon {
@@ -187,13 +197,12 @@
             color: var(--primary);
             margin-bottom: 15px;
         }
-
+        
         .upload-text {
             margin-bottom: 20px;
             color: var(--dark);
         }
         
-        /* UPDATED BUTTON STYLE */
         .btn {
             display: inline-block;
             background: var(--primary);
@@ -281,6 +290,7 @@
             display: block;
             margin-bottom: 10px;
             font-weight: 500;
+            color: var(--dark);
         }
         
         .control-group select {
@@ -306,7 +316,6 @@
             box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
         }
         
-        /* UPDATED ACTION BUTTON STYLE */
         .action-btn {
             width: 100%;
             padding: 16px;
@@ -425,6 +434,29 @@
         .footer-links a { color: white; text-decoration: none; opacity: 0.8; transition: var(--transition); }
         .footer-links a:hover { opacity: 1; color: var(--accent); }
         
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
         .copyright {
             text-align: center;
             padding-top: 30px;
@@ -433,8 +465,17 @@
         }
         
         /* Responsive Styles */
+        @media (max-width: 992px) {
+            .ad-space {
+                flex-basis: 250px;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .header-content { position: relative; }
+            .header-content {
+                position: relative;
+            }
+            
             nav {
                 position: absolute;
                 top: 100%;
@@ -445,23 +486,69 @@
                 clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
                 transition: var(--transition);
             }
+            
             nav.active {
                 clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
             }
-            nav ul { flex-direction: column; gap: 15px; }
-            .mobile-menu-btn { display: block; }
-            .main-content { flex-direction: column; }
-            .ad-space { order: -1; }
-            .hero h2 { font-size: 2rem; }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .ad-space {
+                order: -1;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .ad-unit {
+                flex: 1 1 100%;
+            }
+            
+            .ad-unit.horizontal {
+                flex: 1 1 100%;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-tools" style="font-size: 1.5rem;"></i>
+                    <i class="fas fa-tools" style="font-size: 2rem;"></i>
                     <h1>ToolsHub</h1>
                 </div>
                 <button class="mobile-menu-btn" id="mobile-menu">
@@ -472,6 +559,8 @@
                         <li><a href="/tools/index.html">Home</a></li>
                         <li><a href="#">Image Tools</a></li>
                         <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
                 </nav>
@@ -479,129 +568,143 @@
         </div>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h2>Free Image to PDF Converter</h2>
-                <p>Combine multiple JPG & PNG images into a single PDF file. Fast, secure, and entirely free.</p>
-            </div>
-        </section>
-
+    <!-- Hero Section -->
+    <section class="hero">
         <div class="container">
-            <div class="main-content">
-                <div class="tool-container">
-                    <h2 class="card-title"><i class="fas fa-image"></i> 1. Upload Your Images</h2>
-                    
-                    <div class="upload-container" id="drop-zone">
-                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                        <h3 class="upload-text">Drag & Drop Images Here</h3>
-                        <p>or click to browse your files</p>
-                        <input type="file" id="file-input" accept="image/jpeg, image/png" multiple>
-                        <button class="btn" id="browse-btn">Select Images</button>
-                    </div>
+            <h2>Free Image to PDF Converter</h2>
+            <p>Combine multiple JPG & PNG images into a single PDF file. Fast, secure, and entirely free.</p>
+        </div>
+    </section>
 
-                    <div id="image-preview-area"></div>
-
-                    <div class="pdf-controls hidden" id="pdf-controls">
-                        <h2 class="card-title"><i class="fas fa-cog"></i> 2. Configure PDF Settings</h2>
-                        <div class="control-grid">
-                            <div class="control-group">
-                                <label for="page-orientation">Page Orientation</label>
-                                <select id="page-orientation">
-                                    <option value="portrait" selected>Portrait</option>
-                                    <option value="landscape">Landscape</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label for="page-size">Page Size</label>
-                                <select id="page-size">
-                                    <option value="a4" selected>A4</option>
-                                    <option value="letter">Letter (US)</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label for="page-margin">Page Margin</label>
-                                <select id="page-margin">
-                                    <option value="0">No Margin</option>
-                                    <option value="10" selected>Small Margin</option>
-                                    <option value="20">Big Margin</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- UPDATED BUTTON HTML CLASS -->
-                        <button class="btn action-btn" id="convert-btn">
-                            <i class="fas fa-file-export"></i> Create PDF
-                        </button>
-                    </div>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <div class="tool-container">
+                <h2 class="card-title"><i class="fas fa-image"></i> 1. Upload Your Images</h2>
+                
+                <div class="upload-container" id="drop-zone">
+                    <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3 class="upload-text">Drag & Drop Images Here</h3>
+                    <p>or</p>
+                    <input type="file" id="file-input" accept="image/jpeg, image/png" multiple hidden>
+                    <button class="btn" id="browse-btn">Select Images</button>
                 </div>
 
-                <aside class="ad-space">
-                    <div class="ad-unit">
-                        <ins class="adsbygoogle"
-                             style="display:block"
-                             data-ad-client="ca-pub-your-publisher-id-here"
-                             data-ad-slot="your-ad-slot-here"
-                             data-ad-format="auto"
-                             data-full-width-responsive="true"></ins>
-                        <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-                        <p>Advertisement</p>
+                <div id="image-preview-area"></div>
+
+                <div class="pdf-controls hidden" id="pdf-controls">
+                    <h2 class="card-title"><i class="fas fa-cog"></i> 2. Configure PDF Settings</h2>
+                    <div class="control-grid">
+                        <div class="control-group">
+                            <label for="page-orientation">Page Orientation</label>
+                            <select id="page-orientation">
+                                <option value="portrait" selected>Portrait</option>
+                                <option value="landscape">Landscape</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="page-size">Page Size</label>
+                            <select id="page-size">
+                                <option value="a4" selected>A4</option>
+                                <option value="letter">Letter (US)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="page-margin">Page Margin</label>
+                            <select id="page-margin">
+                                <option value="0">No Margin</option>
+                                <option value="10" selected>Small Margin</option>
+                                <option value="20">Big Margin</option>
+                            </select>
+                        </div>
                     </div>
-                </aside>
+                    <button class="btn action-btn" id="convert-btn">
+                        <i class="fas fa-file-export"></i> Create PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="ad-space">
+                <div class="ad-unit">
+                   <p>Ad Placeholder</p>
+                </div>
+                
+                <div class="ad-unit horizontal">
+                    <p>Ad Placeholder</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <section class="features">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Why Use Our PDF Converter?</h2>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Use Our PDF Converter?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <h3>100% Secure & Private</h3>
+                    <p>Your images are processed in your browser. Nothing is uploaded to our servers, ensuring your privacy.</p>
                 </div>
-                <div class="features-grid">
-                    <div class="feature">
-                        <i class="fas fa-lock"></i>
-                        <h3>100% Secure & Private</h3>
-                        <p>Your images are processed in your browser. Nothing is uploaded to our servers, ensuring your privacy.</p>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-bolt"></i>
-                        <h3>Lightning Fast Conversion</h3>
-                        <p>The conversion is incredibly fast, powered by your browser. No waiting time for servers to process your files.</p>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-sliders-h"></i>
-                        <h3>Full Customization</h3>
-                        <p>Adjust page orientation, standard paper sizes, and margins to customize your PDF exactly as you need it.</p>
-                    </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Lightning Fast Conversion</h3>
+                    <p>The conversion is incredibly fast, powered by your browser. No waiting time for servers to process your files.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-sliders-h"></i>
+                    <h3>Full Customization</h3>
+                    <p>Adjust page orientation, standard paper sizes, and margins to customize your PDF exactly as you need it.</p>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
-                 <div class="footer-section">
+                <div class="footer-section">
                     <h3>About ToolsHub</h3>
                     <p>ToolsHub provides free online tools to help you work with images and PDF files more efficiently.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="/tools/index.html">Home</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
                     </ul>
                 </div>
-                 <div class="footer-section">
+                <div class="footer-section">
                     <h3>Popular Tools</h3>
                     <ul class="footer-links">
                         <li><a href="/tools/img-compression.html">Image Compressor</a></li>
-                        <li><a href="#">Image to PDF Converter</a></li>
+                        <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
+                        <li><a href="/tools/heictojpg.html">HEIC to JPG Converter</a></li>
+                        <li><a href="#">PDF Merger</a></li>
                         <li><a href="/tools/image-resize.html">Image Resizer</a></li>
                     </ul>
                 </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> support@toolshub.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</p>
+                </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 ToolsHub. All rights reserved.</p>
+                <p>&copy; 2023 ToolsHub. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -615,7 +718,23 @@
         mobileMenuBtn.addEventListener('click', () => {
             nav.classList.toggle('active');
             const icon = mobileMenuBtn.querySelector('i');
-            icon.className = nav.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target) && nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
 
         // --- PDF Converter Functionality ---
