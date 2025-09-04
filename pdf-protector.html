@@ -132,6 +132,22 @@
         .password-group input { width: 100%; padding: 12px 40px 12px 15px; border: 1px solid #e1e8ed; border-radius: var(--border-radius); font-size: 1rem; }
         .password-group .toggle-password { position: absolute; right: 15px; top: 40px; cursor: pointer; color: var(--gray); }
         #password-match-error { color: var(--accent); font-size: 0.9rem; display: none; }
+        
+        /* Password Strength Indicator */
+        .password-strength { margin-top: 5px; height: 5px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+        .password-strength-bar { height: 100%; width: 0%; transition: width 0.3s; }
+        .password-strength-text { font-size: 0.8rem; margin-top: 5px; }
+
+        /* Advanced Options */
+        .advanced-options { background: var(--light); padding: 15px; border-radius: var(--border-radius); margin-top: 20px; }
+        .advanced-toggle { color: var(--primary); cursor: pointer; font-weight: 500; display: flex; align-items: center; }
+        .advanced-toggle i { margin-right: 8px; transition: transform 0.3s; }
+        .advanced-toggle.active i { transform: rotate(90deg); }
+        .advanced-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .advanced-content.active { max-height: 500px; }
+        .permissions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .permission-item { display: flex; align-items: center; }
+        .permission-item input { margin-right: 10px; }
 
         /* Action Buttons */
         .action-buttons { margin-top: 20px; }
@@ -147,6 +163,48 @@
         .progress-bar { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; margin-bottom: 10px; }
         .progress { height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.3s; }
         .status-text { font-size: 0.9rem; color: var(--gray); text-align: center; }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toast {
+            background: white;
+            border-left: 4px solid var(--success);
+            box-shadow: var(--box-shadow);
+            padding: 15px 20px;
+            margin-top: 10px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .toast.error {
+            border-left-color: #e74c3c;
+        }
+        
+        .toast i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: #e74c3c;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
 
         /* Ad Space */
         .ad-space { flex: 1 1 30%; display: flex; flex-direction: column; gap: 20px; }
@@ -183,6 +241,7 @@
             .mobile-menu-btn { display: block; }
             .main-content { flex-direction: column; }
             .tool-card, .ad-space { flex: 1 1 100%; }
+            .permissions-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -248,6 +307,10 @@
                             <label for="password">Set a Password</label>
                             <input type="password" id="password" placeholder="Enter your password">
                             <i class="fas fa-eye toggle-password"></i>
+                            <div class="password-strength">
+                                <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                            </div>
+                            <div class="password-strength-text" id="passwordStrengthText"></div>
                         </div>
                         <div class="password-group">
                             <label for="confirmPassword">Confirm Password</label>
@@ -255,6 +318,43 @@
                             <i class="fas fa-eye toggle-password"></i>
                         </div>
                         <p id="password-match-error">Passwords do not match.</p>
+                        
+                        <div class="advanced-options">
+                            <div class="advanced-toggle" id="advancedToggle">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Advanced Options</span>
+                            </div>
+                            <div class="advanced-content" id="advancedContent">
+                                <div class="password-group">
+                                    <label for="ownerPassword">Owner Password (optional)</label>
+                                    <input type="password" id="ownerPassword" placeholder="Different from user password">
+                                    <i class="fas fa-eye toggle-password"></i>
+                                    <div class="password-strength-text">
+                                        If set, this password will have full control over the PDF
+                                    </div>
+                                </div>
+                                
+                                <h4>Permissions</h4>
+                                <div class="permissions-grid">
+                                    <div class="permission-item">
+                                        <input type="checkbox" id="allowPrinting" checked>
+                                        <label for="allowPrinting">Allow Printing</label>
+                                    </div>
+                                    <div class="permission-item">
+                                        <input type="checkbox" id="allowModifying" checked>
+                                        <label for="allowModifying">Allow Modifying</label>
+                                    </div>
+                                    <div class="permission-item">
+                                        <input type="checkbox" id="allowCopying">
+                                        <label for="allowCopying">Allow Copying</label>
+                                    </div>
+                                    <div class="permission-item">
+                                        <input type="checkbox" id="allowAnnotations" checked>
+                                        <label for="allowAnnotations">Allow Annotations</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -298,6 +398,9 @@
             </aside>
         </div>
     </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <!-- Features Section -->
     <section class="features">
@@ -388,12 +491,18 @@
             const fileSizeEl = document.getElementById('fileSize');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+            const passwordStrengthText = document.getElementById('passwordStrengthText');
+            const ownerPasswordInput = document.getElementById('ownerPassword');
             const passwordError = document.getElementById('password-match-error');
+            const advancedToggle = document.getElementById('advancedToggle');
+            const advancedContent = document.getElementById('advancedContent');
             const protectBtn = document.getElementById('protectBtn');
             const downloadBtn = document.getElementById('downloadBtn');
             const progressContainer = document.getElementById('progressContainer');
             const progressBar = document.getElementById('progressBar');
             const statusText = document.getElementById('statusText');
+            const toastContainer = document.getElementById('toastContainer');
             
             let selectedFile = null;
 
@@ -417,9 +526,12 @@
             dropArea.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
 
             // Password validation
-            [passwordInput, confirmPasswordInput].forEach(input => {
+            [passwordInput, confirmPasswordInput, ownerPasswordInput].forEach(input => {
                 input.addEventListener('input', validatePasswords);
             });
+            
+            // Password strength calculation
+            passwordInput.addEventListener('input', checkPasswordStrength);
             
             // Toggle password visibility
             document.querySelectorAll('.toggle-password').forEach(toggle => {
@@ -432,26 +544,112 @@
                 });
             });
 
+            // Advanced options toggle
+            advancedToggle.addEventListener('click', () => {
+                advancedToggle.classList.toggle('active');
+                advancedContent.classList.toggle('active');
+            });
+
             protectBtn.addEventListener('click', protectPdf);
 
             // --- Functions ---
+            function showToast(message, isError = false) {
+                const toast = document.createElement('div');
+                toast.className = `toast ${isError ? 'error' : 'success'}`;
+                toast.innerHTML = `
+                    <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Remove toast after 5 seconds
+                setTimeout(() => {
+                    toast.style.animation = 'slideIn 0.3s ease reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+            }
+
             function handleFile(file) {
                 if (file && file.type === 'application/pdf') {
+                    // Check file size (limit to 100MB)
+                    if (file.size > 100 * 1024 * 1024) {
+                        showToast('File size exceeds 100MB limit. Please choose a smaller file.', true);
+                        return;
+                    }
+                    
                     selectedFile = file;
                     fileNameEl.textContent = file.name;
-                    fileSizeEl.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB`;
+                    fileSizeEl.textContent = formatFileSize(file.size);
                     
                     uploadSection.style.display = 'none';
                     settingsSection.style.display = 'block';
                     validatePasswords();
+                    
+                    showToast('PDF file loaded successfully');
                 } else {
-                    alert('Please select a valid PDF file.');
+                    showToast('Please select a valid PDF file.', true);
                 }
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                else return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+
+            function checkPasswordStrength() {
+                const password = passwordInput.value;
+                let strength = 0;
+                let message = '';
+                let color = '';
+                
+                if (password.length > 0) {
+                    // Length check
+                    if (password.length >= 8) strength += 1;
+                    
+                    // Character variety checks
+                    if (/[A-Z]/.test(password)) strength += 1;
+                    if (/[a-z]/.test(password)) strength += 1;
+                    if (/[0-9]/.test(password)) strength += 1;
+                    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+                }
+                
+                // Set strength indicator
+                switch(strength) {
+                    case 0:
+                        message = '';
+                        color = 'transparent';
+                        break;
+                    case 1:
+                    case 2:
+                        message = 'Weak';
+                        color = '#e74c3c';
+                        break;
+                    case 3:
+                        message = 'Medium';
+                        color = '#f39c12';
+                        break;
+                    case 4:
+                        message = 'Strong';
+                        color = '#2ecc71';
+                        break;
+                    case 5:
+                        message = 'Very Strong';
+                        color = '#27ae60';
+                        break;
+                }
+                
+                passwordStrengthBar.style.width = `${(strength / 5) * 100}%`;
+                passwordStrengthBar.style.background = color;
+                passwordStrengthText.textContent = message;
+                passwordStrengthText.style.color = color;
             }
 
             function validatePasswords() {
                 const pass1 = passwordInput.value;
                 const pass2 = confirmPasswordInput.value;
+                const ownerPass = ownerPasswordInput.value;
 
                 if (pass1 && pass2 && pass1 !== pass2) {
                     passwordError.style.display = 'block';
@@ -459,6 +657,11 @@
                 } else {
                     passwordError.style.display = 'none';
                     protectBtn.disabled = !(selectedFile && pass1 && pass1 === pass2);
+                }
+                
+                // If owner password is set but user password is empty, disable button
+                if (ownerPass && !pass1) {
+                    protectBtn.disabled = true;
                 }
             }
 
@@ -472,7 +675,7 @@
                 statusText.textContent = 'Reading PDF file...';
 
                 try {
-                    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+                    const { PDFDocument } = PDFLib;
                     const arrayBuffer = await selectedFile.arrayBuffer();
 
                     progressBar.style.width = '25%';
@@ -483,22 +686,27 @@
                     progressBar.style.width = '50%';
                     statusText.textContent = 'Applying encryption...';
                     
-                    const password = passwordInput.value;
-                    const options = {
-                        userPassword: password,
-                        ownerPassword: password, // For simplicity, owner and user pass are the same
-                        permissions: {
-                            printing: 'highResolution',
-                            modifying: false,
-                            copying: false,
-                            annotating: false,
-                            fillingForms: false,
-                            contentAccessibility: false,
-                            documentAssembly: false,
-                        },
+                    const userPassword = passwordInput.value;
+                    const ownerPassword = ownerPasswordInput.value || userPassword;
+                    
+                    // Get permission settings
+                    const permissions = {
+                        printing: document.getElementById('allowPrinting').checked ? 'highResolution' : false,
+                        modifying: document.getElementById('allowModifying').checked,
+                        copying: document.getElementById('allowCopying').checked,
+                        annotating: document.getElementById('allowAnnotations').checked,
+                        fillingForms: document.getElementById('allowAnnotations').checked,
+                        contentAccessibility: document.getElementById('allowCopying').checked,
+                        documentAssembly: document.getElementById('allowModifying').checked,
                     };
 
-                    const pdfBytes = await pdfDoc.save({ ...options });
+                    const options = {
+                        userPassword: userPassword,
+                        ownerPassword: ownerPassword,
+                        permissions: permissions,
+                    };
+
+                    const pdfBytes = await pdfDoc.save(options);
                     
                     progressBar.style.width = '100%';
                     statusText.textContent = 'Encryption complete!';
@@ -513,11 +721,12 @@
                         protectBtn.style.display = 'none';
                         downloadBtn.style.display = 'block';
                         progressContainer.style.display = 'none';
+                        showToast('PDF successfully protected!');
                     }, 500);
 
                 } catch (error) {
                     console.error('Error protecting PDF:', error);
-                    alert('An error occurred. The PDF might be corrupted or already encrypted.');
+                    showToast('An error occurred. The PDF might be corrupted or already encrypted.', true);
                     resetTool();
                 }
             }
@@ -529,6 +738,9 @@
                  settingsSection.style.display = 'none';
                  passwordInput.value = '';
                  confirmPasswordInput.value = '';
+                 ownerPasswordInput.value = '';
+                 passwordStrengthBar.style.width = '0%';
+                 passwordStrengthText.textContent = '';
                  protectBtn.disabled = true;
                  protectBtn.innerHTML = 'Protect PDF';
                  protectBtn.style.display = 'block';
