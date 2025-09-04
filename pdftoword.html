@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Free online PDF to Word converter. Convert PDF to editable DOC/DOCX files with perfect formatting. No registration needed.">
     <meta name="keywords" content="PDF to Word, PDF to DOC, PDF converter, online converter, free tool">
-    <title>PDF2Word Converter - Convert PDF to Editable Word Documents Online</title>
+    <title>PDF to Word Converter - ToolsHub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -534,6 +534,30 @@
             .section-title h2 {
                 font-size: 1.8rem;
             }
+            
+             nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--secondary);
+                padding: 20px;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+            
+            nav.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
         }
         
         @media (max-width: 480px) {
@@ -562,8 +586,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-file-word"></i>
-                    <h1>PDF to Word Converter</h1>
+                    <i class="fas fa-tools" style="font-size: 2rem;"></i>
+                    <h1>ToolsHub</h1>
                 </div>
                 <button class="mobile-menu-btn" id="mobile-menu">
                     <i class="fas fa-bars"></i>
@@ -571,7 +595,9 @@
                 <nav id="nav">
                     <ul>
                         <li><a href="/tools/index.html">Home</a></li>
-                        <li><a href="#">Tools</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
                         <li><a href="#">Pricing</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -650,7 +676,7 @@
                     </div>
                 </div>
                 
-                <button class="btn convert-btn" id="convertBtn">Convert to Word Now</button>
+                <button class="btn convert-btn" id="convertBtn" disabled>Convert to Word Now</button>
                 <button class="btn download-btn" id="downloadBtn">Download Word Document</button>
             </div>
             
@@ -658,7 +684,7 @@
                 <div class="ad-unit">
                     <div class="ad-placeholder">
                         <i class="fas fa-ad"></i>
-                        <p>Ad Space (300x250)</p>
+                        <p>Ad Placeholder</p>
                     </div>
                     <p>Google AdSense Ad Unit</p>
                 </div>
@@ -666,7 +692,7 @@
                 <div class="ad-unit">
                     <div class="ad-placeholder">
                         <i class="fas fa-ad"></i>
-                        <p>Ad Space (300x600)</p>
+                        <p>Ad Placeholder</p>
                     </div>
                     <p>Google AdSense Ad Unit</p>
                 </div>
@@ -699,12 +725,13 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>About Us</h3>
-                    <p>We provide free online tools to help you work with documents more efficiently.</p>
+                    <h3>About ToolsHub</h3>
+                    <p>ToolsHub provides free online tools to help you work with images and PDF files more efficiently.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -712,37 +739,35 @@
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
                         <li><a href="/tools/index.html">Home</a></li>
-                        <li><a href="#">How It Works</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Image Tools</a></li>
+                        <li><a href="#">PDF Tools</a></li>
+                        <li><a href="#">Other Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-section">
-                    <h3>Other Tools</h3>
+                    <h3>Popular Tools</h3>
                     <ul class="footer-links">
-                        <li><a href="/tools/pdftoword">Word to PDF</a></li>
-                        <li><a href="#">PDF Compressor</a></li>
+                        <li><a href="/tools/img-compression.html">Image Compressor</a></li>
+                        <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
+                        <li><a href="/tools/heictojpg.html">HEIC to JPG Converter</a></li>
                         <li><a href="#">PDF Merger</a></li>
-                        <li><a href="#">PDF to Excel</a></li>
+                        <li><a href="/tools/image-resize.html">Image Resizer</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-section">
                     <h3>Contact Us</h3>
-                    <p><i class="fas fa-envelope"></i> support@pdftoword.com</p>
+                    <p><i class="fas fa-envelope"></i> support@toolshub.com</p>
                     <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
                     <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</p>
                 </div>
             </div>
-            
             <div class="copyright">
-                <p>&copy; 2023 PDF to Word Converter. All rights reserved.</p>
+                <p>&copy; 2023 ToolsHub. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -753,17 +778,19 @@
             const mobileMenuBtn = document.getElementById('mobile-menu');
             const nav = document.getElementById('nav');
             
-            mobileMenuBtn.addEventListener('click', () => {
-                nav.classList.toggle('active');
-                const icon = mobileMenuBtn.querySelector('i');
-                if (nav.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            });
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (nav.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
             
             // File selection
             const browseBtn = document.getElementById('browseBtn');
@@ -840,7 +867,6 @@
                             location.reload();
                         });
                         
-                        // Enable convert button
                         convertBtn.disabled = false;
                     } else {
                         alert('Please select a PDF file.');
@@ -879,17 +905,13 @@
                     return;
                 }
                 
-                // Show progress container
                 progressContainer.style.display = 'block';
                 
-                // Simulate conversion process
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
                 this.disabled = true;
                 
-                // Generate output filename
-                convertedFileName = selectedFile.name.replace('.pdf', '.docx');
+                convertedFileName = selectedFile.name.replace(/\.pdf$/i, '.docx');
                 
-                // Simulate progress
                 let progress = 0;
                 const interval = setInterval(() => {
                     progress += 5;
@@ -905,13 +927,8 @@
                         statusText.textContent = "Conversion complete!";
                         
                         setTimeout(() => {
-                            // Hide progress container
                             progressContainer.style.display = 'none';
-                            
-                            // Show download info
                             downloadInfo.style.display = 'block';
-                            
-                            // Hide convert button, show download button
                             convertBtn.style.display = 'none';
                             downloadBtn.style.display = 'block';
                         }, 500);
@@ -921,27 +938,21 @@
             
             // Download button
             downloadBtn.addEventListener('click', function() {
-                // Create a dummy Word document for download simulation
-                const blob = new Blob(['Simulated Word document content'], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+                // This is a simulation. A real implementation would require a server-side library.
+                const blob = new Blob([`This is a simulated DOCX file converted from ${selectedFile.name}`], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
                 const url = URL.createObjectURL(blob);
                 
-                // Create a temporary anchor element for download
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = convertedFileName;
                 document.body.appendChild(a);
                 a.click();
                 
-                // Clean up
                 setTimeout(() => {
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                     
-                    // Show success message
-                    alert('Your Word document has been downloaded successfully!');
-                    
-                    // Option to convert another file
-                    if (confirm('Would you like to convert another PDF file?')) {
+                    if (confirm('Download successful! Would you like to convert another PDF file?')) {
                         location.reload();
                     }
                 }, 100);
