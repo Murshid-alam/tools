@@ -46,14 +46,14 @@
             padding: 0 20px;
         }
         
-        /* Common Header & Footer from ToolsHub */
+        /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 1rem 0;
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
             box-shadow: var(--box-shadow);
         }
         
@@ -91,7 +91,14 @@
             color: var(--accent);
         }
         
-        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
         
         /* Hero Section */
         .hero {
@@ -99,88 +106,461 @@
             text-align: center;
             background: linear-gradient(rgba(67, 97, 238, 0.9), rgba(58, 12, 163, 0.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234361ee"/><path d="M0 0L100 100" stroke="%233a0ca3" stroke-width="2"/><path d="M100 0L0 100" stroke="%233a0ca3" stroke-width="2"/></svg>');
             color: white;
+            background-attachment: fixed;
         }
         
-        .hero h2 { font-size: 2.8rem; margin-bottom: 20px; }
-        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; opacity: 0.9; }
-
-        /* Main Content & Tool Specific Styles */
-        .main-content { display: flex; flex-wrap: wrap; gap: 25px; margin: 30px 0; }
-        .tool-card { flex: 1 1 65%; background: white; border-radius: var(--border-radius); padding: 30px; box-shadow: var(--box-shadow); }
-        .card-title { font-size: 1.5rem; color: var(--dark); margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--light); display: flex; align-items: center; gap: 10px; }
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
         
-        .upload-area { border: 2px dashed #d0d7de; border-radius: var(--border-radius); padding: 40px 20px; text-align: center; margin-bottom: 25px; transition: var(--transition); cursor: pointer; background: var(--light); }
-        .upload-area:hover { border-color: var(--primary); background: rgba(67, 97, 238, 0.05); }
-        .upload-area.dragover { background-color: rgba(67, 97, 238, 0.1); border-color: var(--primary); }
-        .upload-icon { font-size: 3.5rem; color: var(--primary); margin-bottom: 15px; }
-        .upload-text { margin-bottom: 20px; color: var(--dark); }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
         
-        .btn { display: inline-block; background: var(--primary); color: white; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; transition: var(--transition); border: none; font-size: 1rem; box-shadow: var(--box-shadow); }
-        .btn:hover { background: var(--secondary); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+        /* Tool Container */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
         
-        /* File List Styles */
-        #file-list-container { display: none; margin-bottom: 20px; }
-        #file-list-info { text-align: center; color: var(--gray); font-size: 0.9rem; margin-bottom: 15px; }
-        #file-list { list-style: none; padding: 0; border: 1px solid #e1e8ed; border-radius: var(--border-radius); }
-        #file-list li { display: flex; align-items: center; padding: 15px; background: white; border-bottom: 1px solid #e1e8ed; cursor: grab; transition: background 0.2s; user-select: none; }
-        #file-list li:last-child { border-bottom: none; }
-        #file-list li.dragging { opacity: 0.5; background: #eaf2ff; }
-        #file-list .file-icon { color: #e74c3c; font-size: 1.5rem; margin-right: 15px; }
-        #file-list .file-name { flex-grow: 1; color: var(--dark); word-break: break-all; }
-        #file-list .remove-btn { background: none; border: none; color: var(--gray); font-size: 1rem; cursor: pointer; transition: color 0.2s; padding: 5px; }
-        #file-list .remove-btn:hover { color: var(--accent); }
+        .tool-container {
+            flex: 1 1 700px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .ad-space {
+            flex: 0 1 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .ad-unit {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .ad-unit.horizontal {
+            min-height: auto;
+            height: 90px;
+        }
+        
+        .upload-container {
+            border: 2px dashed #d0d0d0;
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .upload-container:hover {
+            border-color: var(--primary);
+        }
+        
+        .upload-container.dragover {
+            background-color: rgba(67, 97, 238, 0.05);
+            border-color: var(--primary);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .upload-container h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .upload-container p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none; /* For <a> tags styled as buttons */
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background: #e20a72;
+        }
 
-        /* Action Buttons */
-        .action-buttons { margin-top: 20px; }
-        .action-btn { width: 100%; padding: 16px; font-size: 1.1rem; }
-        #mergeBtn { background: var(--accent); box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3); }
-        #mergeBtn:hover { background: #e20a72; box-shadow: 0 6px 15px rgba(247, 37, 133, 0.4); }
-        #mergeBtn:disabled { background: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; }
-        #downloadBtn { display: none; background: var(--success); box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3); }
-        #downloadBtn:hover { background: #3ab7e0; box-shadow: 0 6px 15px rgba(76, 201, 240, 0.4); }
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
 
-        /* Progress Bar */
-        .progress-container { display: none; margin: 20px 0; }
-        .progress-bar { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; margin-bottom: 10px; }
-        .progress { height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.3s; }
-        .status-text { font-size: 0.9rem; color: var(--gray); text-align: center; }
+        /* PDF Merger Specific Styles */
+        #file-list-container {
+            margin-bottom: 25px;
+        }
 
-        /* Ad Space */
-        .ad-space { flex: 1 1 30%; display: flex; flex-direction: column; gap: 20px; }
-        .ad-unit { background: white; border-radius: var(--border-radius); padding: 20px; text-align: center; box-shadow: var(--box-shadow); min-height: 250px; display: flex; align-items: center; justify-content: center; }
+        #file-list-info {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        #file-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #file-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--light);
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            cursor: grab;
+            transition: var(--transition);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            user-select: none;
+        }
+
+        #file-list li:hover {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        #file-list li.dragging {
+            opacity: 0.5;
+            background: #eaf2ff;
+            box-shadow: none;
+        }
+
+        #file-list .file-icon {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        #file-list .file-name {
+            flex-grow: 1;
+            color: var(--dark);
+            word-break: break-all;
+            font-size: 0.95rem;
+        }
+
+        #file-list .remove-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px;
+            line-height: 1;
+        }
+
+        #file-list .remove-btn:hover {
+            color: var(--accent);
+        }
+
+        .progress-container {
+            margin: 25px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.4s ease-in-out;
+        }
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .action-buttons .btn {
+            width: 100%;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        #downloadBtn {
+            background: var(--success);
+        }
+        #downloadBtn:hover {
+            background: #3ab7e0;
+        }
         
         /* Features Section */
-        .features { background: white; padding: 60px 0; margin: 40px 0; }
-        .section-title { text-align: center; margin: 60px 0 40px; }
-        .section-title h2 { font-size: 2.2rem; color: var(--dark); }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .feature { text-align: center; padding: 30px; }
-        .feature i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
-        .feature h3 { margin-bottom: 15px; color: var(--dark); }
+        .features {
+            background: white;
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .feature:hover {
+            background: var(--light);
+            transform: translateY(-5px);
+        }
+        
+        .feature i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
         
         /* Footer */
-        footer { background: var(--dark); color: white; padding: 60px 0 30px; margin-top: 40px; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-section h3 { font-size: 1.3rem; margin-bottom: 20px; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: white; text-decoration: none; opacity: 0.8; transition: var(--transition); }
-        .footer-links a:hover { opacity: 1; color: var(--accent); }
-        .social-links { display: flex; gap: 15px; margin-top: 20px; padding: 0; }
-        .social-links a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); color: white; border-radius: 50%; transition: var(--transition); }
-        .social-links a:hover { background: var(--accent); }
-        .copyright { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.7; }
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-section p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 0;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
         
         /* Responsive Styles */
-        @media (max-width: 768px) {
-            .header-content { position: relative; }
-            nav { position: absolute; top: 100%; left: 0; right: 0; background: var(--secondary); padding: 20px; clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: var(--transition); z-index: 999; }
-            nav.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-            nav ul { flex-direction: column; gap: 15px; }
-            .mobile-menu-btn { display: block; }
-            .main-content { flex-direction: column; }
-            .tool-card, .ad-space { flex: 1 1 100%; }
+        @media (max-width: 992px) {
+            .ad-space {
+                flex-basis: 250px;
+            }
         }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                position: relative;
+            }
+            
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--secondary);
+                padding: 20px;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+            
+            nav.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .ad-space {
+                order: -1;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .ad-unit {
+                flex: 1 1 100%;
+            }
+            
+            .ad-unit.horizontal {
+                flex: 1 1 100%;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -220,31 +600,29 @@
     <!-- Main Content -->
     <main class="container">
         <div class="main-content">
-            <!-- PDF Merger Tool Card -->
-            <section class="tool-card">
-                <h2 class="card-title"><i class="fas fa-object-group"></i> PDF Merger</h2>
-                
-                <div class="upload-area" id="dropArea">
+            <!-- PDF Merger Tool Container -->
+            <section class="tool-container">
+                <div class="upload-container" id="dropArea">
                     <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
-                    <h3 class="upload-text">Drag & Drop PDF files here</h3>
-                    <p>or</p>
-                    <input type="file" id="fileInput" accept=".pdf" multiple hidden>
+                    <h3>Upload Your PDF Files</h3>
+                    <p>Drag & drop PDF files here or click to browse</p>
+                    <input type="file" id="fileInput" accept=".pdf" multiple class="hidden">
                     <button class="btn" id="browseBtn">Select PDF Files</button>
                 </div>
 
-                <div id="file-list-container">
+                <div id="file-list-container" class="hidden">
                     <p id="file-list-info">You have selected <span id="file-count">0</span> files. Drag to reorder.</p>
                     <ul id="file-list"></ul>
                 </div>
                 
-                <div class="progress-container" id="progressContainer">
+                <div class="progress-container hidden" id="progressContainer">
                     <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
                     <p class="status-text" id="statusText"></p>
                 </div>
 
                 <div class="action-buttons">
-                    <button class="btn action-btn" id="mergeBtn" disabled>Merge PDFs</button>
-                    <a class="btn action-btn" id="downloadBtn" href="#" download="merged.pdf">Download Merged PDF</a>
+                    <button class="btn btn-accent" id="mergeBtn" disabled>Merge PDFs</button>
+                    <a class="btn hidden" id="downloadBtn" href="#" download="merged.pdf">Download Merged PDF</a>
                 </div>
             </section>
             
@@ -252,7 +630,6 @@
             <aside class="ad-space">
                 <div class="ad-unit">
                     <!-- Google AdSense Ad Unit -->
-                    <!-- Replace with your AdSense Publisher ID and Ad Slot ID -->
                     <ins class="adsbygoogle"
                          style="display:block"
                          data-ad-client="ca-pub-YOUR_PUBLISHER_ID_HERE"
@@ -265,7 +642,6 @@
                 </div>
                 <div class="ad-unit">
                      <!-- Google AdSense Ad Unit -->
-                     <!-- Replace with your AdSense Publisher ID and Ad Slot ID -->
                     <ins class="adsbygoogle"
                          style="display:block"
                          data-ad-client="ca-pub-YOUR_PUBLISHER_ID_HERE"
@@ -353,14 +729,34 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu
-            const mobileMenuBtn = document.getElementById('mobile-menu');
-            const nav = document.getElementById('nav');
-            mobileMenuBtn.addEventListener('click', () => {
-                nav.classList.toggle('active');
-            });
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const nav = document.getElementById('nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target) && nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
 
+        // PDF Merger functionality
+        document.addEventListener('DOMContentLoaded', () => {
             // Tool DOM Elements
             const dropArea = document.getElementById('dropArea');
             const fileInput = document.getElementById('fileInput');
@@ -411,26 +807,37 @@
             function renderFileList() {
                 fileList.innerHTML = '';
                 if (filesToMerge.length > 0) {
-                    fileListContainer.style.display = 'block';
+                    fileListContainer.classList.remove('hidden');
                 } else {
-                    fileListContainer.style.display = 'none';
+                    fileListContainer.classList.add('hidden');
                 }
 
                 filesToMerge.forEach((file, index) => {
                     const li = document.createElement('li');
                     li.setAttribute('draggable', 'true');
-                    li.dataset.index = index;
+                    li.dataset.originalIndex = index;
 
                     li.innerHTML = `
                         <i class="fas fa-file-pdf file-icon"></i>
                         <span class="file-name">${file.name}</span>
-                        <button class="remove-btn" data-index="${index}">&times;</button>
+                        <button class="remove-btn" data-index-to-remove="${index}">&times;</button>
                     `;
                     fileList.appendChild(li);
                 });
 
                 updateFileCountAndButton();
                 addDragAndDropToListItems();
+                addRemoveButtonListeners();
+            }
+            
+            function addRemoveButtonListeners() {
+                fileList.querySelectorAll('.remove-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const indexToRemove = parseInt(e.currentTarget.dataset.indexToRemove, 10);
+                        filesToMerge.splice(indexToRemove, 1);
+                        renderFileList();
+                    });
+                });
             }
 
             function updateFileCountAndButton() {
@@ -438,50 +845,48 @@
                 mergeBtn.disabled = filesToMerge.length < 2;
             }
 
-            fileList.addEventListener('click', (e) => {
-                if (e.target.classList.contains('remove-btn')) {
-                    const indexToRemove = parseInt(e.target.dataset.index, 10);
-                    filesToMerge.splice(indexToRemove, 1);
-                    renderFileList();
-                }
-            });
-
             function addDragAndDropToListItems() {
-                const listItems = fileList.querySelectorAll('li');
                 let draggedItem = null;
 
-                listItems.forEach(item => {
-                    item.addEventListener('dragstart', () => {
-                        draggedItem = item;
-                        setTimeout(() => item.classList.add('dragging'), 0);
+                fileList.querySelectorAll('li').forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        draggedItem = e.target.closest('li');
+                        setTimeout(() => draggedItem.classList.add('dragging'), 0);
                     });
 
                     item.addEventListener('dragend', () => {
                         setTimeout(() => {
-                            draggedItem.classList.remove('dragging');
-                            draggedItem = null;
+                            if (draggedItem) {
+                                draggedItem.classList.remove('dragging');
+                                draggedItem = null;
+                                updateFileOrderFromDOM();
+                            }
                         }, 0);
                     });
-
-                    item.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        const afterElement = getDragAfterElement(fileList, e.clientY);
+                });
+                
+                fileList.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(fileList, e.clientY);
+                    const currentlyDragged = document.querySelector('.dragging');
+                    if (currentlyDragged) {
                         if (afterElement == null) {
-                            fileList.appendChild(draggedItem);
+                            fileList.appendChild(currentlyDragged);
                         } else {
-                            fileList.insertBefore(draggedItem, afterElement);
+                            fileList.insertBefore(currentlyDragged, afterElement);
                         }
-                    });
+                    }
                 });
+            }
 
-                fileList.addEventListener('drop', () => {
-                    const newOrder = [];
-                    fileList.querySelectorAll('li').forEach(li => {
-                        newOrder.push(filesToMerge[parseInt(li.dataset.index)]);
-                    });
-                    filesToMerge = newOrder;
-                    renderFileList(); // Re-render to update indices
+            function updateFileOrderFromDOM() {
+                const newOrder = [];
+                fileList.querySelectorAll('li').forEach(li => {
+                    const originalIndex = parseInt(li.dataset.originalIndex, 10);
+                    newOrder.push(filesToMerge[originalIndex]);
                 });
+                filesToMerge = newOrder;
+                renderFileList(); // Re-render to update indices correctly
             }
 
             function getDragAfterElement(container, y) {
@@ -502,10 +907,13 @@
                     alert('Please select at least two PDF files to merge.');
                     return;
                 }
-
+                
+                // Hide file list and show progress
+                fileListContainer.classList.add('hidden');
+                dropArea.classList.add('hidden');
                 mergeBtn.disabled = true;
                 mergeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Merging...';
-                progressContainer.style.display = 'block';
+                progressContainer.classList.remove('hidden');
                 progressBar.style.width = '0%';
                 statusText.textContent = 'Starting merge process...';
 
@@ -518,7 +926,7 @@
                         statusText.textContent = `Processing file ${i + 1} of ${filesToMerge.length}: ${file.name}`;
                         
                         const arrayBuffer = await file.arrayBuffer();
-                        const pdf = await PDFDocument.load(arrayBuffer);
+                        const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
                         const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
                         copiedPages.forEach((page) => mergedPdf.addPage(page));
 
@@ -532,18 +940,27 @@
                     const url = URL.createObjectURL(blob);
 
                     downloadBtn.href = url;
-                    downloadBtn.style.display = 'block';
-                    mergeBtn.style.display = 'none';
-                    progressContainer.style.display = 'none';
+                    downloadBtn.classList.remove('hidden');
+                    mergeBtn.classList.add('hidden');
+                    progressContainer.classList.add('hidden');
 
                 } catch (error) {
                     console.error('Error merging PDFs:', error);
-                    alert('An error occurred while merging the PDFs. Please check the console for details.');
-                    // Reset UI
-                    mergeBtn.disabled = false;
-                    mergeBtn.innerHTML = 'Merge PDFs';
-                    progressContainer.style.display = 'none';
+                    alert('An error occurred while merging the PDFs. Some files might be encrypted or corrupted.');
+                    resetTool();
                 }
+            }
+            
+            function resetTool() {
+                 filesToMerge = [];
+                 renderFileList();
+                 dropArea.classList.remove('hidden');
+                 mergeBtn.classList.remove('hidden');
+                 mergeBtn.innerHTML = 'Merge PDFs';
+                 mergeBtn.disabled = true;
+                 downloadBtn.classList.add('hidden');
+                 progressContainer.classList.add('hidden');
+                 fileInput.value = '';
             }
         });
     </script>
