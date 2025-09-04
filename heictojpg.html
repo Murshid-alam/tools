@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online HEIC to JPG converter. Convert HEIC images from your iPhone to widely supported JPG format instantly. No registration needed.">
+    <meta name="keywords" content="HEIC to JPG, HEIC converter, iPhone image converter, HEIC to JPEG, online converter, free tool">
+    <title>HEICtoJPG Converter - Convert HEIC Images to JPG Format Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@2.0.2/dist/heic2any.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --gray: #6c757d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+        
+        nav a:hover {
+            color: var(--accent);
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(rgba(67, 97, 238, 0.9), rgba(58, 12, 163, 0.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234361ee"/><path d="M0 0L100 100" stroke="%233a0ca3" stroke-width="2"/><path d="M100 0L0 100" stroke="%233a0ca3" stroke-width="2"/></svg>');
+            color: white;
+            background-attachment: fixed;
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        /* Tool Container */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .tool-container {
+            flex: 1 1 65%;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .ad-space {
+            flex: 0 1 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .ad-unit {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .ad-unit.horizontal {
+            min-height: auto;
+            height: 90px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-container {
+            border: 2px dashed #d0d7de;
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: var(--transition);
+            cursor: pointer;
+            background: var(--light);
+        }
+        
+        .upload-container:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .upload-container.dragover {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .upload-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        .conversion-controls {
+            margin: 25px 0;
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .quality-control {
+            margin-top: 20px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--secondary);
+        }
+        
+        .slider-value {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .preview-box {
+            flex: 1 1 300px;
+            text-align: center;
+        }
+        
+        .preview-box h4 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 10px;
+        }
+        
+        .file-info {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .quality-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        .convert-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            background: var(--accent);
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3);
+        }
+        
+        .convert-btn:hover {
+            background: #e20a72;
+            box-shadow: 0 6px 15px rgba(247, 37, 133, 0.4);
+        }
+        
+        .info-box {
+            background: rgba(76, 201, 240, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+        
+        .info-box h4 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 60px 0;
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .feature:hover {
+            background: var(--light);
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .feature i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-section p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .ad-space {
+                flex-basis: 250px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                position: relative;
+            }
+            
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--secondary);
+                padding: 20px;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+            
+            nav.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .ad-space {
+                order: -1;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .ad-unit {
+                flex: 1 1 100%;
+            }
+            
+            .ad-unit.horizontal {
+                flex: 1 1 100%;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .preview-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h1>HEICtoJPG Converter</h1>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Tools</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Convert HEIC to JPG Format</h2>
+            <p>Easily convert your HEIC images from iPhone to widely supported JPG format. No software installation required.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <div class="tool-container">
+                <h2 class="card-title"><i class="fas fa-sync-alt"></i> HEIC to JPG Converter</h2>
+                
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> What is HEIC?</h4>
+                    <p>HEIC is the default image format on iOS devices. While it offers better compression, it's not widely supported on all platforms. Convert your HEIC images to JPG for universal compatibility.</p>
+                </div>
+                
+                <div class="upload-container" id="drop-zone">
+                    <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h3 class="upload-text">Drag & Drop your HEIC image here</h3>
+                    <p>or</p>
+                    <input type="file" id="file-input" accept=".heic,.HEIC,image/heic,image/HEIC" hidden>
+                    <button class="btn" id="browse-btn">Select HEIC File</button>
+                </div>
+
+                <div class="conversion-controls hidden" id="controls">
+                    <div class="control-group quality-control">
+                        <label for="image-quality">Output Quality</label>
+                        <div class="slider-container">
+                            <input type="range" min="10" max="100" value="90" class="slider" id="image-quality">
+                            <span class="slider-value" id="quality-value">90%</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn convert-btn" id="convert-btn">Convert to JPG</button>
+                </div>
+
+                <div class="preview-container hidden" id="preview">
+                    <div class="preview-box">
+                        <h4>Original HEIC Image</h4>
+                        <img id="original-preview" class="image-preview">
+                        <div class="file-info" id="original-info">Size: 0 KB</div>
+                    </div>
+                    
+                    <div class="preview-box">
+                        <h4>Converted JPG Image <span class="quality-tag" id="quality-tag">90% quality</span></h4>
+                        <img id="converted-preview" class="image-preview">
+                        <div class="file-info" id="converted-info">Size: 0 KB</div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" id="download-btn">Download JPG Image</button>
+                        <button class="btn" id="new-image-btn">Convert Another Image</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ad-space">
+                <div class="ad-unit">
+                    <!-- AdSense Ad Unit - Replace with your Ad Unit ID -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-your-publisher-id-here"
+                         data-ad-slot="your-ad-slot-here"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+                
+                <div class="ad-unit horizontal">
+                    <!-- AdSense Horizontal Ad Unit - Replace with your Ad Unit ID -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-your-publisher-id-here"
+                         data-ad-slot="your-ad-slot-here"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Convert HEIC to JPG?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-universal-access"></i>
+                    <h3>Universal Compatibility</h3>
+                    <p>JPG is supported by virtually all devices, platforms, and applications, unlike HEIC which is primarily an Apple format.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-share-alt"></i>
+                    <h3>Easy Sharing</h3>
+                    <p>Share your images effortlessly with others without worrying about format compatibility issues.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <h3>100% Secure</h3>
+                    <p>All processing happens in your browser. Your images are never uploaded to any server.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About HEICtoJPG Converter</h3>
+                    <p>We provide free online tools to help you work with images more efficiently.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Popular Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Image Converter</a></li>
+                        <li><a href="#">Image Resizer</a></li>
+                        <li><a href="#">PDF to Word Converter</a></li>
+                        <li><a href="#">PDF Compressor</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> support@heictojpg.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 HEICtoJPG Converter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const nav = document.getElementById('nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target) && nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // HEIC to JPG conversion functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+            const browseBtn = document.getElementById('browse-btn');
+            const imageQuality = document.getElementById('image-quality');
+            const qualityValue = document.getElementById('quality-value');
+            const convertBtn = document.getElementById('convert-btn');
+            const originalPreview = document.getElementById('original-preview');
+            const convertedPreview = document.getElementById('converted-preview');
+            const originalInfo = document.getElementById('original-info');
+            const convertedInfo = document.getElementById('converted-info');
+            const downloadBtn = document.getElementById('download-btn');
+            const newImageBtn = document.getElementById('new-image-btn');
+            const controls = document.getElementById('controls');
+            const preview = document.getElementById('preview');
+            const qualityTag = document.getElementById('quality-tag');
+            
+            let selectedFile = null;
+            let convertedImageBlob = null;
+            
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('dragleave', handleDragLeave);
+            dropZone.addEventListener('drop', handleDrop);
+            imageQuality.addEventListener('input', updateQualityValue);
+            convertBtn.addEventListener('click', convertImage);
+            downloadBtn.addEventListener('click', downloadImage);
+            newImageBtn.addEventListener('click', resetTool);
+            
+            // Functions
+            function handleDragOver(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('dragover');
+            }
+            
+            function handleDragLeave(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('dragover');
+            }
+            
+            function handleDrop(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length && isHeicFile(files[0])) {
+                    processImage(files[0]);
+                } else {
+                    alert('Please select a HEIC file.');
+                }
+            }
+            
+            function handleFileSelect(e) {
+                const files = e.target.files;
+                if (files.length && isHeicFile(files[0])) {
+                    processImage(files[0]);
+                } else {
+                    alert('Please select a HEIC file.');
+                }
+            }
+            
+            function isHeicFile(file) {
+                // Check for HEIC file by extension or MIME type
+                const fileName = file.name.toLowerCase();
+                return fileName.endsWith('.heic') || 
+                       fileName.endsWith('.heif') ||
+                       file.type === 'image/heic' || 
+                       file.type === 'image/heif';
+            }
+            
+            function processImage(file) {
+                selectedFile = file;
+                
+                // Show file info
+                const fileSize = (file.size / 1024).toFixed(2);
+                originalInfo.textContent = `Size: ${fileSize} KB | Type: HEIC`;
+                
+                // For HEIC files, we can't preview directly, so show a placeholder
+                originalPreview.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23f0f0f0"/><text x="100" y="100" font-family="Arial" font-size="14" fill="%23333" text-anchor="middle">HEIC Image Preview Not Available</text></svg>';
+                
+                // Show controls
+                controls.classList.remove('hidden');
+                dropZone.classList.add('hidden');
+            }
+            
+            function updateQualityValue() {
+                qualityValue.textContent = `${imageQuality.value}%`;
+                qualityTag.textContent = `${imageQuality.value}% quality`;
+            }
+            
+            function convertImage() {
+                if (!selectedFile) return;
+                
+                const quality = parseInt(imageQuality.value) / 100;
+                
+                // Show converting state
+                convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+                convertBtn.disabled = true;
+                
+                // Use the heic2any library to convert HEIC to JPG
+                heic2any({
+                    blob: selectedFile,
+                    toType: 'image/jpeg',
+                    quality: quality
+                })
+                .then(conversionResult => {
+                    // Create a URL for the converted image
+                    const url = URL.createObjectURL(conversionResult);
+                    
+                    // Show converted image preview
+                    convertedPreview.src = url;
+                    
+                    // Get file size info
+                    conversionResult.arrayBuffer().then(buffer => {
+                        const convertedSize = (buffer.byteLength / 1024).toFixed(2);
+                        const originalSize = (selectedFile.size / 1024).toFixed(2);
+                        
+                        convertedInfo.textContent = `Size: ${convertedSize} KB | Type: JPG`;
+                        
+                        // Store the converted blob for download
+                        convertedImageBlob = conversionResult;
+                        
+                        // Show preview section
+                        preview.classList.remove('hidden');
+                        controls.classList.add('hidden');
+                    });
+                    
+                    // Reset convert button
+                    convertBtn.innerHTML = 'Convert to JPG';
+                    convertBtn.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Conversion error:', error);
+                    alert('Error converting image. Please try again with a different file.');
+                    
+                    // Reset convert button
+                    convertBtn.innerHTML = 'Convert to JPG';
+                    convertBtn.disabled = false;
+                });
+            }
+            
+            function downloadImage() {
+                if (!convertedImageBlob) return;
+                
+                const url = URL.createObjectURL(convertedImageBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `converted-${selectedFile.name.replace('.heic', '.jpg').replace('.HEIC', '.jpg')}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+            
+            function resetTool() {
+                // Reset UI
+                originalPreview.src = '';
+                convertedPreview.src = '';
+                originalInfo.textContent = 'Size: 0 KB';
+                convertedInfo.textContent = 'Size: 0 KB';
+                
+                // Reset values
+                imageQuality.value = 90;
+                updateQualityValue();
+                
+                // Hide/show appropriate sections
+                preview.classList.add('hidden');
+                controls.classList.add('hidden');
+                dropZone.classList.remove('hidden');
+                
+                // Reset variables
+                selectedFile = null;
+                convertedImageBlob = null;
+                fileInput.value = '';
+            }
+            
+            // Initialize values
+            updateQualityValue();
+        });
+    </script>
+</body>
+</html>
