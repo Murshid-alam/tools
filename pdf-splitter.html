@@ -391,6 +391,46 @@
             display: none;
         }
         
+        /* Toast Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            color: var(--dark);
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--accent);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
         /* Features Section */
         .features {
             background: white;
@@ -694,9 +734,7 @@
                         <div class="page-range-display">
                             <h4>Selected Page Ranges:</h4>
                             <div id="range-list">
-                                <span class="range-badge">1-5 <i class="fas fa-times"></i></span>
-                                <span class="range-badge">8 <i class="fas fa-times"></i></span>
-                                <span class="range-badge">11-13 <i class="fas fa-times"></i></span>
+                                <!-- Example badges removed, will be added dynamically -->
                             </div>
                         </div>
                     </div>
@@ -729,22 +767,8 @@
                     <h3 class="card-title"><i class="fas fa-check-circle"></i> Split Complete!</h3>
                     <p>Your PDF has been successfully split into the following files:</p>
                     
-                    <div class="results-grid">
-                        <div class="result-item">
-                            <div class="result-icon"><i class="fas fa-file-pdf"></i></div>
-                            <p>Document_1.pdf</p>
-                            <p class="file-info">5 pages (1.2 MB)</p>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-icon"><i class="fas fa-file-pdf"></i></div>
-                            <p>Document_2.pdf</p>
-                            <p class="file-info">3 pages (0.8 MB)</p>
-                        </div>
-                        <div class="result-item">
-                            <div class="result-icon"><i class="fas fa-file-pdf"></i></div>
-                            <p>Document_3.pdf</p>
-                            <p class="file-info">4 pages (1.1 MB)</p>
-                        </div>
+                    <div class="results-grid" id="results-grid">
+                        <!-- Example items removed, will be added dynamically -->
                     </div>
                     
                     <div class="action-buttons">
@@ -765,6 +789,10 @@
             </div>
         </div>
     </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
 
     <!-- Features Section -->
     <section class="features">
@@ -881,12 +909,14 @@
             const progressBar = document.getElementById('progress-bar');
             const progressText = document.getElementById('progress-text');
             const resultsContainer = document.getElementById('results-container');
+            const resultsGrid = document.getElementById('results-grid');
             const downloadAllBtn = document.getElementById('download-all-btn');
             const newSplitBtn = document.getElementById('new-split-btn');
             const controls = document.getElementById('controls');
             const addRangeBtn = document.getElementById('add-range');
             const pageRangeInput = document.getElementById('page-range');
             const rangeList = document.getElementById('range-list');
+            const toastContainer = document.getElementById('toast-container');
             
             let selectedFile = null;
             let currentMethod = 'range';
@@ -925,6 +955,19 @@
             });
             
             // Functions
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                toast.innerHTML = `<i class="fas ${iconClass}"></i><span>${message}</span>`;
+                toastContainer.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.animation = 'slideIn 0.3s ease reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+            }
+            
             function handleDragOver(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -946,7 +989,7 @@
                 if (files.length && files[0].type === 'application/pdf') {
                     processFile(files[0]);
                 } else {
-                    alert('Please select a PDF file.');
+                    showToast('Please select a valid PDF file.', 'error');
                 }
             }
             
@@ -955,7 +998,7 @@
                 if (files.length && files[0].type === 'application/pdf') {
                     processFile(files[0]);
                 } else {
-                    alert('Please select a PDF file.');
+                    showToast('Please select a valid PDF file.', 'error');
                 }
             }
             
@@ -972,6 +1015,7 @@
                 `;
                 
                 document.getElementById('change-file-btn').addEventListener('click', resetTool);
+                showToast(`Selected file: ${file.name}`);
                 
                 // Show controls
                 controls.classList.remove('hidden');
@@ -982,7 +1026,7 @@
                 if (range) {
                     const badge = document.createElement('span');
                     badge.className = 'range-badge';
-                    badge.innerHTML = `${range} <i class="fas fa-times"></i>`;
+                    badge.innerHTML = `${range} <i class="fas fa-times" style="cursor: pointer; margin-left: 5px;"></i>`;
                     
                     badge.querySelector('i').addEventListener('click', function() {
                         badge.remove();
@@ -990,12 +1034,15 @@
                     
                     rangeList.appendChild(badge);
                     pageRangeInput.value = '';
+                    showToast('Page range added.');
+                } else {
+                    showToast('Please enter a page range.', 'error');
                 }
             }
             
             function splitPDF() {
                 if (!selectedFile) {
-                    alert('Please select a PDF file first.');
+                    showToast('Please select a PDF file first.', 'error');
                     return;
                 }
                 
@@ -1017,16 +1064,30 @@
                         clearInterval(interval);
                         progressText.textContent = "Split complete!";
                         
-                        setTimeout(() {
+                        setTimeout(() => {
                             progressContainer.style.display = 'none';
                             resultsContainer.style.display = 'block';
+                            // Populate fake results for demonstration
+                            resultsGrid.innerHTML = `
+                                <div class="result-item">
+                                    <div class="result-icon"><i class="fas fa-file-pdf"></i></div>
+                                    <p>Document_1.pdf</p>
+                                    <p class="file-info">5 pages (1.2 MB)</p>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-icon"><i class="fas fa-file-pdf"></i></div>
+                                    <p>Document_2.pdf</p>
+                                    <p class="file-info">3 pages (0.8 MB)</p>
+                                </div>
+                            `;
+                            showToast('PDF successfully split!');
                         }, 500);
                     }
                 }, 100);
             }
             
             function downloadAll() {
-                alert('In a real application, this would download all split PDF files as a ZIP archive.');
+                showToast('Downloading all files as a ZIP archive.');
             }
             
             function resetTool() {
@@ -1035,13 +1096,12 @@
                     <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                     <h3 class="upload-text">Drag & Drop your PDF file here</h3>
                     <p>or</p>
-                    <input type="file" id="file-input" accept=".pdf" hidden>
-                    <button class="btn" id="browse-btn">Select PDF File</button>
+                    <button class="btn" id="browse-btn-reset">Select PDF File</button>
                 `;
-                
-                // Reattach event listeners
-                document.getElementById('browse-btn').addEventListener('click', () => fileInput.click());
-                fileInput.addEventListener('change', handleFileSelect);
+                 
+                fileInput.value = ''; // Important to clear the input
+                const newBrowseBtn = document.getElementById('browse-btn-reset');
+                newBrowseBtn.addEventListener('click', () => fileInput.click());
                 
                 // Hide/show appropriate sections
                 resultsContainer.style.display = 'none';
@@ -1050,10 +1110,10 @@
                 
                 // Reset variables
                 selectedFile = null;
-                fileInput.value = '';
                 
                 // Reset range list
                 rangeList.innerHTML = '';
+                showToast('Tool has been reset.', 'success');
             }
         });
     </script>
