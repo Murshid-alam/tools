@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Secure your sensitive PDF files by adding strong password protection. Our free online PDF Protector works in your browser, no uploads needed. Encrypt your PDF in seconds.">
-    <meta name="keywords" content="PDF protector, password protect PDF, encrypt PDF, secure PDF, add password to PDF, online tool, free">
-    <title>PDF Protector - Add Password to PDF Online Free | ToolsHub</title>
-    
+    <title>Protect PDF - ToolsHub</title>
     <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- PDF-Lib for client-side PDF manipulation -->
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
-    
+
     <style>
         :root {
             --primary: #4361ee;
@@ -150,13 +147,30 @@
         .permission-item input { margin-right: 10px; }
 
         /* Action Buttons */
-        .action-buttons { margin-top: 20px; }
-        .action-btn { width: 100%; padding: 16px; font-size: 1.1rem; }
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            flex: 1 1 auto;
+        }
         #protectBtn { background: var(--accent); box-shadow: 0 4px 10px rgba(247, 37, 133, 0.3); }
         #protectBtn:hover { background: #e20a72; box-shadow: 0 6px 15px rgba(247, 37, 133, 0.4); }
         #protectBtn:disabled { background: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; }
-        #downloadBtn { display: none; background: var(--success); box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3); }
+        #downloadBtn { display: none; background: var(--success); box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3); text-align: center; }
         #downloadBtn:hover { background: #3ab7e0; box-shadow: 0 6px 15px rgba(76, 201, 240, 0.4); }
+        #resetBtn {
+            display: none;
+            background: var(--primary);
+        }
+        #resetBtn:hover {
+            background: var(--secondary);
+        }
 
         /* Progress Bar */
         .progress-container { display: none; margin: 20px 0; }
@@ -165,46 +179,13 @@
         .status-text { font-size: 0.9rem; color: var(--gray); text-align: center; }
         
         /* Toast Notifications */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        
-        .toast {
-            background: white;
-            border-left: 4px solid var(--success);
-            box-shadow: var(--box-shadow);
-            padding: 15px 20px;
-            margin-top: 10px;
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            animation: slideIn 0.3s ease;
-        }
-        
-        .toast.error {
-            border-left-color: #e74c3c;
-        }
-        
-        .toast i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .toast.success i {
-            color: var(--success);
-        }
-        
-        .toast.error i {
-            color: #e74c3c;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+        .toast { background: white; border-left: 4px solid var(--success); box-shadow: var(--box-shadow); padding: 15px 20px; margin-top: 10px; border-radius: var(--border-radius); display: flex; align-items: center; animation: slideIn 0.3s ease; }
+        .toast.error { border-left-color: #e74c3c; }
+        .toast i { margin-right: 10px; font-size: 1.2rem; }
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: #e74c3c; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         /* Ad Space */
         .ad-space { flex: 1 1 30%; display: flex; flex-direction: column; gap: 20px; }
@@ -366,34 +347,19 @@
                 <div class="action-buttons">
                     <button class="btn action-btn" id="protectBtn" disabled>Protect PDF</button>
                     <a class="btn action-btn" id="downloadBtn" href="#" download="protected.pdf">Download Protected PDF</a>
+                    <button class="btn action-btn" id="resetBtn">Protect Another PDF</button>
                 </div>
             </section>
             
             <!-- Advertisement Space -->
             <aside class="ad-space">
                 <div class="ad-unit">
-                    <!-- Google AdSense Ad Unit -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-YOUR_PUBLISHER_ID_HERE"
-                         data-ad-slot="YOUR_AD_SLOT_ID_HERE"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
+                    <!-- Placeholder for Ad -->
+                    <p>Advertisement</p>
                 </div>
                 <div class="ad-unit">
-                     <!-- Google AdSense Ad Unit -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-YOUR_PUBLISHER_ID_HERE"
-                         data-ad-slot="YOUR_AD_SLOT_ID_HERE"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
+                    <!-- Placeholder for Ad -->
+                     <p>Advertisement</p>
                 </div>
             </aside>
         </div>
@@ -455,10 +421,10 @@
                 <div class="footer-section">
                     <h3>Popular Tools</h3>
                     <ul class="footer-links">
-                        <li><a href="/tools/pdf-merger.html">PDF Merger</a></li>
-                        <li><a href="/tools/pdftoword.html">PDF to Word Converter</a></li>
-                        <li><a href="/tools/heictojpg.html">HEIC to JPG Converter</a></li>
-                        <li><a href="/tools/image-resizer.html">Image Resizer</a></li>
+                        <li><a href="#">PDF Merger</a></li>
+                        <li><a href="#">PDF to Word Converter</a></li>
+                        <li><a href="#">HEIC to JPG Converter</a></li>
+                        <li><a href="#">Image Resizer</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -499,6 +465,7 @@
             const advancedContent = document.getElementById('advancedContent');
             const protectBtn = document.getElementById('protectBtn');
             const downloadBtn = document.getElementById('downloadBtn');
+            const resetBtn = document.getElementById('resetBtn');
             const progressContainer = document.getElementById('progressContainer');
             const progressBar = document.getElementById('progressBar');
             const statusText = document.getElementById('statusText');
@@ -536,7 +503,7 @@
             // Toggle password visibility
             document.querySelectorAll('.toggle-password').forEach(toggle => {
                 toggle.addEventListener('click', (e) => {
-                    const input = e.target.previousElementSibling;
+                    const input = e.target.closest('.password-group').querySelector('input');
                     const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
                     input.setAttribute('type', type);
                     e.target.classList.toggle('fa-eye');
@@ -551,6 +518,7 @@
             });
 
             protectBtn.addEventListener('click', protectPdf);
+            resetBtn.addEventListener('click', resetTool);
 
             // --- Functions ---
             function showToast(message, isError = false) {
@@ -560,10 +528,7 @@
                     <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
                     <span>${message}</span>
                 `;
-                
                 toastContainer.appendChild(toast);
-                
-                // Remove toast after 5 seconds
                 setTimeout(() => {
                     toast.style.animation = 'slideIn 0.3s ease reverse';
                     setTimeout(() => toast.remove(), 300);
@@ -572,20 +537,16 @@
 
             function handleFile(file) {
                 if (file && file.type === 'application/pdf') {
-                    // Check file size (limit to 100MB)
-                    if (file.size > 100 * 1024 * 1024) {
-                        showToast('File size exceeds 100MB limit. Please choose a smaller file.', true);
+                    if (file.size > 100 * 1024 * 1024) { // 100MB limit
+                        showToast('File size exceeds 100MB limit.', true);
                         return;
                     }
-                    
                     selectedFile = file;
                     fileNameEl.textContent = file.name;
                     fileSizeEl.textContent = formatFileSize(file.size);
-                    
                     uploadSection.style.display = 'none';
                     settingsSection.style.display = 'block';
                     validatePasswords();
-                    
                     showToast('PDF file loaded successfully');
                 } else {
                     showToast('Please select a valid PDF file.', true);
@@ -593,7 +554,7 @@
             }
 
             function formatFileSize(bytes) {
-                if (bytes < 1024) return bytes + ' bytes';
+                if (bytes < 1024) return bytes + ' Bytes';
                 else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
                 else return (bytes / 1048576).toFixed(1) + ' MB';
             }
@@ -605,43 +566,24 @@
                 let color = '';
                 
                 if (password.length > 0) {
-                    // Length check
-                    if (password.length >= 8) strength += 1;
-                    
-                    // Character variety checks
-                    if (/[A-Z]/.test(password)) strength += 1;
-                    if (/[a-z]/.test(password)) strength += 1;
-                    if (/[0-9]/.test(password)) strength += 1;
-                    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+                    if (password.length >= 8) strength++;
+                    if (/[A-Z]/.test(password)) strength++;
+                    if (/[a-z]/.test(password)) strength++;
+                    if (/[0-9]/.test(password)) strength++;
+                    if (/[^A-Za-z0-9]/.test(password)) strength++;
                 }
                 
-                // Set strength indicator
                 switch(strength) {
-                    case 0:
-                        message = '';
-                        color = 'transparent';
-                        break;
+                    case 0: message = ''; color = 'transparent'; break;
                     case 1:
-                    case 2:
-                        message = 'Weak';
-                        color = '#e74c3c';
-                        break;
-                    case 3:
-                        message = 'Medium';
-                        color = '#f39c12';
-                        break;
-                    case 4:
-                        message = 'Strong';
-                        color = '#2ecc71';
-                        break;
-                    case 5:
-                        message = 'Very Strong';
-                        color = '#27ae60';
-                        break;
+                    case 2: message = 'Weak'; color = '#e74c3c'; break;
+                    case 3: message = 'Medium'; color = '#f39c12'; break;
+                    case 4: message = 'Strong'; color = '#2ecc71'; break;
+                    case 5: message = 'Very Strong'; color = '#27ae60'; break;
                 }
                 
                 passwordStrengthBar.style.width = `${(strength / 5) * 100}%`;
-                passwordStrengthBar.style.background = color;
+                passwordStrengthBar.style.backgroundColor = color;
                 passwordStrengthText.textContent = message;
                 passwordStrengthText.style.color = color;
             }
@@ -650,16 +592,16 @@
                 const pass1 = passwordInput.value;
                 const pass2 = confirmPasswordInput.value;
                 const ownerPass = ownerPasswordInput.value;
+                const passwordsMatch = pass1 && pass1 === pass2;
 
                 if (pass1 && pass2 && pass1 !== pass2) {
                     passwordError.style.display = 'block';
-                    protectBtn.disabled = true;
                 } else {
                     passwordError.style.display = 'none';
-                    protectBtn.disabled = !(selectedFile && pass1 && pass1 === pass2);
                 }
                 
-                // If owner password is set but user password is empty, disable button
+                protectBtn.disabled = !(selectedFile && pass1 && passwordsMatch);
+
                 if (ownerPass && !pass1) {
                     protectBtn.disabled = true;
                 }
@@ -675,54 +617,52 @@
                 statusText.textContent = 'Reading PDF file...';
 
                 try {
-                    const { PDFDocument } = PDFLib;
+                    const { PDFDocument, PermissionFlag } = PDFLib;
                     const arrayBuffer = await selectedFile.arrayBuffer();
-
-                    progressBar.style.width = '25%';
                     statusText.textContent = 'Loading document...';
+                    progressBar.style.width = '25%';
 
                     const pdfDoc = await PDFDocument.load(arrayBuffer);
-                    
-                    progressBar.style.width = '50%';
                     statusText.textContent = 'Applying encryption...';
+                    progressBar.style.width = '50%';
                     
                     const userPassword = passwordInput.value;
                     const ownerPassword = ownerPasswordInput.value || userPassword;
                     
-                    // Get permission settings
                     const permissions = {
-                        printing: document.getElementById('allowPrinting').checked ? 'highResolution' : false,
+                        printing: document.getElementById('allowPrinting').checked,
                         modifying: document.getElementById('allowModifying').checked,
                         copying: document.getElementById('allowCopying').checked,
                         annotating: document.getElementById('allowAnnotations').checked,
-                        fillingForms: document.getElementById('allowAnnotations').checked,
-                        contentAccessibility: document.getElementById('allowCopying').checked,
-                        documentAssembly: document.getElementById('allowModifying').checked,
                     };
 
-                    const options = {
+                    await pdfDoc.save({
                         userPassword: userPassword,
                         ownerPassword: ownerPassword,
-                        permissions: permissions,
-                    };
+                        permissions: {
+                            ...((permissions.printing) ? {print: true} : {print: false}),
+                            ...((permissions.modifying) ? {modify: true} : {modify: false}),
+                            ...((permissions.copying) ? {copy: true} : {copy: false}),
+                            ...((permissions.annotating) ? {addAnnots: true} : {addAnnots: false})
+                        }
+                    }).then(pdfBytes => {
+                        progressBar.style.width = '100%';
+                        statusText.textContent = 'Encryption complete!';
 
-                    const pdfBytes = await pdfDoc.save(options);
-                    
-                    progressBar.style.width = '100%';
-                    statusText.textContent = 'Encryption complete!';
+                        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                        const url = URL.createObjectURL(blob);
 
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-
-                    downloadBtn.href = url;
-                    downloadBtn.download = `protected-${selectedFile.name}`;
-                    
-                    setTimeout(() => {
-                        protectBtn.style.display = 'none';
-                        downloadBtn.style.display = 'block';
-                        progressContainer.style.display = 'none';
-                        showToast('PDF successfully protected!');
-                    }, 500);
+                        downloadBtn.href = url;
+                        downloadBtn.download = `protected-${selectedFile.name}`;
+                        
+                        setTimeout(() => {
+                            protectBtn.style.display = 'none';
+                            downloadBtn.style.display = 'inline-block';
+                            resetBtn.style.display = 'inline-block';
+                            progressContainer.style.display = 'none';
+                            showToast('PDF successfully protected!');
+                        }, 500);
+                    });
 
                 } catch (error) {
                     console.error('Error protecting PDF:', error);
@@ -745,6 +685,7 @@
                  protectBtn.innerHTML = 'Protect PDF';
                  protectBtn.style.display = 'block';
                  downloadBtn.style.display = 'none';
+                 resetBtn.style.display = 'none';
             }
         });
     </script>
